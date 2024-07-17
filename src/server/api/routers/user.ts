@@ -4,7 +4,6 @@ import {
     protectedProcedure,
 } from "~/server/api/trpc";
 
-import { db } from "~/server/db";
 
 const loginSchema = z.object({
     email: z.string().min(1),
@@ -14,12 +13,16 @@ const loginSchema = z.object({
 })
 
 export const userRouter = createTRPCRouter({
-    create: protectedProcedure.input(loginSchema).mutation(async ({ input }) => {
+    create: protectedProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
         try {
-            const user = await db.user.create({ data: input })
+            const user = await ctx.db.user.create({ data: input })
             return user
         } catch (error) {
             return null
         }
+    }),
+    getAll: protectedProcedure.query(async ({ ctx }) => {
+        const users = await ctx.db.user.findMany()
+        return users
     })
 })

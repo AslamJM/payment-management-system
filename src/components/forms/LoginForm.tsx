@@ -57,7 +57,6 @@ export default function LoginForm() {
       console.log({ response });
       if (!response?.error) {
         router.push("/");
-        router.refresh();
       }
 
       if (!response!.ok) {

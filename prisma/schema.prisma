@@ -34,11 +34,11 @@ model Account {
     provider                 String
     providerAccountId        String
     refresh_token            String? @db.Text
-    access_token             String? // @db.Text
+    access_token             String?  @db.Text
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? // @db.Text
+    id_token                 String? @db.Text
     session_state            String?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     refresh_token_expires_in Int?
@@ -55,7 +55,6 @@ model Session {
 }
 
 enum Role {
-    SUPER_ADMIN
     ADMIN
     EMPLOYEE
 }
@@ -63,9 +62,8 @@ enum Role {
 model User {
     id            String    @id @default(cuid())
     name          String?
-    email         String   @unique
+    username         String   @unique
     password String
-    emailVerified DateTime?
     image         String?
     role Role
     accounts      Account[]
@@ -79,4 +77,93 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+
+model Region {
+    id Int      @id @default(autoincrement())
+    name String @unique
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    shops Shop[]
+}
+
+model Shop {
+   id Int      @id @default(autoincrement())
+    name String @unique
+    address String
+    region_id Int 
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    region Region @relation(fields: [region_id],references: [id]) 
+    payments Payment[]
+}
+
+model Company {
+    id Int      @id @default(autoincrement())
+    name String @unique
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    payments Payment[]
+}
+
+model Collector {
+    id Int      @id @default(autoincrement())
+    name String @unique
+    phone String @unique
+    email String?
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    payments Payment[]
+}
+
+enum PaymentStatus {
+    PAID
+    DUE
+    CANCELLED
+}
+    
+
+
+model Payment {
+   id Int      @id @default(autoincrement())
+   invoice_number String @unique
+   total Float
+   paid Float
+   due Float
+   free Float
+   discount Float
+   saleable_return Float
+   market_return Float 
+   payment_date DateTime
+   verified Boolean @default(false)
+   payment_status PaymentStatus @default(DUE)
+
+   created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+   shop_id Int
+   company_id Int
+   collector_id Int
+
+   shop Shop @relation(fields: [shop_id],references: [id])
+   company Company @relation(fields: [company_id],references: [id])
+   collector Collector @relation(fields: [collector_id],references: [id])
+   histories PaymentHistory[]
+
+}
+
+model PaymentHistory{
+   id Int      @id @default(autoincrement())
+   amount Float
+   date DateTime
+   payment_id Int
+   payment Payment @relation(fields: [payment_id],references: [id]) 
+
+   created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
 }
