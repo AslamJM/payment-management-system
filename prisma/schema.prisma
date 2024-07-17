@@ -86,6 +86,7 @@ model Region {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
+    status Boolean @default(true)
     shops Shop[]
 }
 
@@ -97,6 +98,7 @@ model Shop {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
+    status Boolean @default(true)
     region Region @relation(fields: [region_id],references: [id]) 
     payments Payment[]
 }
@@ -107,6 +109,7 @@ model Company {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
+    status Boolean @default(true)
     payments Payment[]
 }
 
@@ -118,7 +121,9 @@ model Collector {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
+    status Boolean @default(true)
     payments Payment[]
+    payment_histories PaymentHistory[]
 }
 
 enum PaymentStatus {
@@ -142,6 +147,7 @@ model Payment {
    payment_date DateTime
    verified Boolean @default(false)
    payment_status PaymentStatus @default(DUE)
+    status Boolean @default(true)
 
    created_at DateTime @default(now())
     updated_at DateTime @updatedAt
@@ -162,8 +168,12 @@ model PaymentHistory{
    amount Float
    date DateTime
    payment_id Int
-   payment Payment @relation(fields: [payment_id],references: [id]) 
+   collector_id Int 
 
+   payment Payment @relation(fields: [payment_id],references: [id]) 
+    collector Collector @relation(fields: [collector_id],references: [id])
+
+    status Boolean @default(true)
    created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 }
