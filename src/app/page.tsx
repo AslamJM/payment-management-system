@@ -2,10 +2,12 @@ import Link from "next/link";
 
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import SignOutButton from "./_components/SignOutButton";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
   const session = await getServerAuthSession();
+  console.log("page----", session);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
@@ -25,7 +27,7 @@ export default async function Home() {
           </div>
           <div>
             <div>{JSON.stringify(session)}</div>
-            <Link href="/users">Users</Link>
+            <SignOutButton />
           </div>
         </div>
       </div>

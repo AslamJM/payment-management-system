@@ -19,14 +19,9 @@ import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 
 const FormSchema = z.object({
-  email: z
-    .string()
-    .min(1, {
-      message: "Email cannot be empty",
-    })
-    .email({
-      message: "Invalid email address.",
-    }),
+  username: z.string().min(1, {
+    message: "username cannot be empty",
+  }),
   password: z.string().min(1, {
     message: "Password cannot be empty",
   }),
@@ -37,20 +32,20 @@ type FormData = z.infer<typeof FormSchema>;
 export default function LoginForm() {
   const router = useRouter();
 
-  const form = useForm({
+  const form = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
   const onSubmit = async (data: FormData) => {
-    const { email, password } = data;
+    const { username, password } = data;
 
     try {
       const response = await signIn("credentials", {
-        email,
+        username,
         password,
         redirect: false,
       });
@@ -75,12 +70,12 @@ export default function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="email"
+          name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Email" {...field} type="text" />
+                <Input placeholder="username" {...field} type="text" />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { Role } from "@prisma/client";
+import { type Role } from "@prisma/client";
 import {
   getServerSession,
   type DefaultSession,
@@ -7,6 +7,7 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialProvider from "next-auth/providers/credentials";
+import { JWT } from "next-auth/jwt"
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -31,22 +32,22 @@ declare module "next-auth" {
   }
 }
 
+declare module "next-auth/jwt" {
+  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
+  interface JWT {
+    /** OpenID ID Token */
+    id: string
+    role: Role
+    name?: string
+  }
+}
+
 
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => {
-      console.log(session, user);
-
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: user.id,
-        },
-      }
-    },
-  },
   adapter: PrismaAdapter(db) as Adapter,
+  session: {
+    strategy: "jwt"
+  },
   providers: [
     CredentialProvider({
       name: "Credentials",
@@ -54,14 +55,44 @@ export const authOptions: NextAuthOptions = {
         username: {},
         password: {},
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
+        console.log("credentials-->", credentials);
+
         const user = await db.user.findUnique({ where: { username: credentials?.username } })
-        if (user)
+        if (user) {
+          console.log("user-->", user);
           return user
+
+        }
+        console.log("none none none");
+
         return null;
       },
     }),
   ],
+  callbacks: {
+
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.name = user.name!
+        token.role = user.role
+        token.id = user.id
+      }
+      return token
+    },
+
+    session: ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          name: token.name,
+          role: token.role
+        },
+      }
+    },
+  },
   secret: env.NEXTAUTH_SECRET
 };
 
