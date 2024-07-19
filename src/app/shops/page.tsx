@@ -1,6 +1,7 @@
 import CreateRegionForm from "./_components/region/CreateRegionForm";
 import RegionsTable from "./_components/region/RegionsTable";
 import CreateShopForm from "./_components/shop/CreateShopForm";
+import ShopsTable from "./_components/shop/ShopsTable";
 
 const ShopsPage = () => {
   return (
@@ -9,8 +10,9 @@ const ShopsPage = () => {
         <CreateRegionForm />
         <RegionsTable />
       </div>
-      <div>
+      <div className="space-y-4">
         <CreateShopForm />
+        <ShopsTable />
       </div>
     </main>
   );

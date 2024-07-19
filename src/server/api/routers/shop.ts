@@ -1,3 +1,4 @@
+import { handlerError } from "~/lib/handleError"
 import { createShopSchema, updateShopSchema } from "~/schemas/shop"
 import {
     createTRPCRouter,
@@ -10,22 +11,19 @@ export const shopRouter = createTRPCRouter({
             const created = await ctx.db.shop.create({
                 data: input
             })
+            const withStore = await ctx.db.shop.findFirst({ where: { id: created.id }, include: { region: true } })
             return {
                 success: true,
-                data: created,
+                data: withStore,
                 message: "created successfully"
             }
         } catch (error) {
-            return {
-                success: false,
-                data: null,
-                message: "create failed"
-            }
+            handlerError(error)
         }
     }),
 
     all: protectedProcedure.query(async ({ ctx }) => {
-        return ctx.db.shop.findMany({})
+        return ctx.db.shop.findMany({ include: { region: true } })
     }),
 
     update: protectedProcedure.input(updateShopSchema).mutation(async ({ ctx, input }) => {
