@@ -1,3 +1,4 @@
+import { handlerError } from "~/lib/handleError"
 import { createRegionSchema, updateRegionSchema } from "~/schemas/region"
 import {
     createTRPCRouter,
@@ -16,16 +17,12 @@ export const regionRouter = createTRPCRouter({
                 message: "created successfully"
             }
         } catch (error) {
-            return {
-                success: false,
-                data: null,
-                message: "create failed"
-            }
+            return handlerError(error)
         }
     }),
 
     all: protectedProcedure.query(async ({ ctx }) => {
-        return ctx.db.region.findMany({})
+        return ctx.db.region.findMany({ where: { status: true } })
     }),
 
     update: protectedProcedure.input(updateRegionSchema).mutation(async ({ ctx, input }) => {
@@ -37,11 +34,7 @@ export const regionRouter = createTRPCRouter({
                 message: "updated successfully"
             }
         } catch (error) {
-            return {
-                success: false,
-                data: null,
-                message: "update failed"
-            }
+            handlerError(error)
         }
     })
 })

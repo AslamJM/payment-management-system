@@ -12,5 +12,6 @@ export const updateRegionSchema = z.object({
     })
 })
 
+
 export type CreateRegionInput = z.infer<typeof createRegionSchema>
 export type UpdateRegionInput = z.infer<typeof updateRegionSchema>
