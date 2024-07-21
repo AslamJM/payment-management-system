@@ -2,31 +2,27 @@ import { type FC } from "react";
 
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
-import { Label } from "../ui/label";
 import { cn, formatDate } from "~/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 
 interface DatePickerWithLabelProps {
-  label: string;
-  date: Date;
+  date: Date | null;
   setDate: (date: Date) => void;
 }
 
 const DatePickerWithLabel: FC<DatePickerWithLabelProps> = ({
   date,
   setDate,
-  label,
 }) => {
   return (
     <div>
-      <Label className="mb-1">{label}</Label>
       <Popover>
-        <PopoverTrigger asChild>
+        <PopoverTrigger asChild className="w-full">
           <Button
             variant={"outline"}
             className={cn(
-              "w-[280px] justify-start text-left font-normal",
+              "justify-start text-left font-normal",
               !date && "text-muted-foreground",
             )}
           >
@@ -37,7 +33,7 @@ const DatePickerWithLabel: FC<DatePickerWithLabelProps> = ({
         <PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
-            selected={date}
+            selected={date ?? undefined}
             onSelect={(d) => setDate(d ?? new Date())}
             initialFocus
           />

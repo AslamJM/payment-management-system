@@ -1,15 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { type Region, type Shop } from "@prisma/client";
 import { DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
-import { Check, ChevronsUpDown, Pencil } from "lucide-react";
+import { Check, ChevronsUpDown, Edit, Pencil } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import TooltipIconButton from "~/components/common/TooltipIconButton";
 import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -34,8 +35,13 @@ import { cn } from "~/lib/utils";
 import { createShopSchema, type CreateShopInput } from "~/schemas/shop";
 import { api } from "~/trpc/react";
 
-const CreateShopForm = () => {
+type Props = {
+  shop: (Shop & { region: Region }) | null;
+};
+
+const CreateShopForm = ({ shop }: Props) => {
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const regions = api.regions.all.useQuery();
 
@@ -52,11 +58,17 @@ const CreateShopForm = () => {
 
   const form = useForm<CreateShopInput>({
     resolver: zodResolver(createShopSchema),
-    defaultValues: {
-      name: "",
-      address: "",
-      region_id: undefined,
-    },
+    defaultValues: shop
+      ? {
+          name: shop.name,
+          address: shop.address,
+          region_id: shop.region_id,
+        }
+      : {
+          name: "",
+          address: "",
+          region_id: undefined,
+        },
   });
 
   const utils = api.useUtils();
@@ -71,9 +83,22 @@ const CreateShopForm = () => {
           }
         });
         form.reset();
+        setDialogOpen(false);
       } else {
         if (data) form.setError("name", { message: data.message });
       }
+    },
+  });
+
+  const updateShop = api.shops.update.useMutation({
+    onSuccess: (data) => {
+      if (data.success) {
+        utils.shops.all.setData(undefined, (old) => {
+          return old?.map((s) => (s.id === data.data?.id ? data.data : s));
+        });
+      }
+
+      setDialogOpen(false);
     },
   });
 
@@ -81,20 +106,36 @@ const CreateShopForm = () => {
     create.mutate(values);
   };
 
+  const onUpdate = (values: CreateShopInput) => {
+    if (!shop) return;
+    updateShop.mutate({ id: shop.id, update: values });
+  };
+
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Pencil />
-          Create Shop
-        </Button>
+        {shop ? (
+          <TooltipIconButton content="Edit">
+            <Edit className="h-4 w-4 text-orange-500" />
+          </TooltipIconButton>
+        ) : (
+          <Button>
+            <Pencil />
+            Create Shop
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create Shop</DialogTitle>
+          <DialogTitle>{shop ? "Edit" : "Create"} Shop</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={
+              shop ? form.handleSubmit(onUpdate) : form.handleSubmit(onSubmit)
+            }
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -133,28 +174,27 @@ const CreateShopForm = () => {
                         <CommandInput placeholder="Search area..." />
                         <CommandList>
                           <CommandEmpty>No areas found.</CommandEmpty>
-                          <CommandGroup>
-                            {values.map((c) => (
-                              <CommandItem
-                                key={c.value}
-                                value={c.value}
-                                onSelect={() => {
-                                  form.setValue("region_id", c.id);
-                                  setOpen(false);
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    field.value === c.id
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                                {c.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
+
+                          {values.map((c) => (
+                            <CommandItem
+                              key={c.value}
+                              value={c.value}
+                              onSelect={() => {
+                                form.setValue("region_id", c.id);
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  field.value === c.id
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {c.label}
+                            </CommandItem>
+                          ))}
                         </CommandList>
                       </Command>
                     </PopoverContent>
@@ -177,8 +217,11 @@ const CreateShopForm = () => {
               )}
             />
             <div>
-              <Button disabled={create.isPending} type="submit">
-                Create
+              <Button
+                disabled={create.isPending || updateShop.isPending}
+                type="submit"
+              >
+                {shop ? "Update" : "Create"}
               </Button>
             </div>
           </form>

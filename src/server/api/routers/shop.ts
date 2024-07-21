@@ -9,12 +9,13 @@ export const shopRouter = createTRPCRouter({
     create: protectedProcedure.input(createShopSchema).mutation(async ({ ctx, input }) => {
         try {
             const created = await ctx.db.shop.create({
-                data: input
+                data: input,
+                include: { region: true }
             })
-            const withStore = await ctx.db.shop.findFirst({ where: { id: created.id }, include: { region: true } })
+
             return {
                 success: true,
-                data: withStore,
+                data: created,
                 message: "created successfully"
             }
         } catch (error) {
@@ -28,7 +29,7 @@ export const shopRouter = createTRPCRouter({
 
     update: protectedProcedure.input(updateShopSchema).mutation(async ({ ctx, input }) => {
         try {
-            const updated = await ctx.db.shop.update({ where: { id: input.id }, data: input.update })
+            const updated = await ctx.db.shop.update({ where: { id: input.id }, data: input.update, include: { region: true } })
             return {
                 success: true,
                 data: updated,

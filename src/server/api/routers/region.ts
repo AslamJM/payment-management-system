@@ -34,7 +34,7 @@ export const regionRouter = createTRPCRouter({
                 message: "updated successfully"
             }
         } catch (error) {
-            handlerError(error)
+            return handlerError(error)
         }
     })
 })

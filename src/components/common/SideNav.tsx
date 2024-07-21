@@ -28,14 +28,13 @@ const SideNav = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
-              href="/users"
+              href="/payments"
               className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             >
-              <User className="h-5 w-5" />
-              <span className="sr-only">Users</span>
+              <BadgeDollarSign className="h-5 w-5" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="right">Users</TooltipContent>
+          <TooltipContent side="right">Payments</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -61,27 +60,29 @@ const SideNav = () => {
           </TooltipTrigger>
           <TooltipContent side="right">Companies</TooltipContent>
         </Tooltip>
+
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
-              href="/sales"
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            >
-              <BadgeDollarSign className="h-5 w-5" />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="right">Sales</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              href="/customers"
+              href="/collectors"
               className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             >
               <Users className="h-5 w-5" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="right">Customers</TooltipContent>
+          <TooltipContent side="right">Collectors</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              href="/users"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            >
+              <User className="h-5 w-5" />
+              <span className="sr-only">Users</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="right">Users</TooltipContent>
         </Tooltip>
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">

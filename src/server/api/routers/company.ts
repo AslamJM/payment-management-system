@@ -1,3 +1,4 @@
+import { handlerError } from "~/lib/handleError"
 import { createCompanySchema, updateCompanySchema } from "~/schemas/company"
 import {
     createTRPCRouter,
@@ -16,11 +17,7 @@ export const companyRouter = createTRPCRouter({
                 message: "created successfully"
             }
         } catch (error) {
-            return {
-                success: false,
-                data: null,
-                message: "create failed"
-            }
+            return handlerError(error)
         }
     }),
 
@@ -37,11 +34,7 @@ export const companyRouter = createTRPCRouter({
                 message: "updated successfully"
             }
         } catch (error) {
-            return {
-                success: false,
-                data: null,
-                message: "update failed"
-            }
+            return handlerError(error)
         }
     })
 })

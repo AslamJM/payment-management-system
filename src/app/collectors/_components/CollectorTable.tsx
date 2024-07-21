@@ -6,23 +6,23 @@ import Loader from "~/components/common/Loader";
 import SimpleTableHeader from "~/components/common/SimpleTableHeader";
 import { Table, TableBody, TableCell, TableRow } from "~/components/ui/table";
 import { api } from "~/trpc/react";
-import ShopRow from "./ShopRow";
+import CollectorRow from "./CollectorTableRow";
 
-const ShopsTable = () => {
-  const shops = api.shops.all.useSuspenseQuery()[0];
+const CollectorsTable = () => {
+  const collectors = api.collector.all.useSuspenseQuery()[0];
 
   return (
-    <CardWrapper title="Shops" description="list of all shops">
+    <CardWrapper title="Collectors" description="list of all collectors">
       <Table>
-        <SimpleTableHeader heads={["Name", "Area", "Address", "Actions"]} />
+        <SimpleTableHeader heads={["Name", "Phone", "Email", "Actions"]} />
         <Suspense fallback={<Loader />}>
           <TableBody>
-            {shops.length === 0 ? (
+            {collectors.length === 0 ? (
               <TableRow>
-                <TableCell>No shops were created.</TableCell>
+                <TableCell>No collectors were created.</TableCell>
               </TableRow>
             ) : (
-              shops.map((s) => <ShopRow shop={s} key={s.id} />)
+              collectors.map((s) => <CollectorRow collector={s} key={s.id} />)
             )}
           </TableBody>
         </Suspense>
@@ -31,4 +31,4 @@ const ShopsTable = () => {
   );
 };
 
-export default ShopsTable;
+export default CollectorsTable;

@@ -11,7 +11,7 @@ const ShopsPage = () => {
         <RegionsTable />
       </div>
       <div className="space-y-4">
-        <CreateShopForm />
+        <CreateShopForm shop={null} />
         <ShopsTable />
       </div>
     </main>

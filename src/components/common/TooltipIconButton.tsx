@@ -2,7 +2,7 @@ import { type FC, type ReactNode } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface TooltipIconButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   children: ReactNode;
   content: string;
 }

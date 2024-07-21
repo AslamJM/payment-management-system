@@ -1,4 +1,7 @@
+"use client";
+
 import { Trash } from "lucide-react";
+import { useState } from "react";
 import TooltipIconButton from "~/components/common/TooltipIconButton";
 import { Button } from "~/components/ui/button";
 import {
@@ -12,9 +15,17 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 
-export function RegionDelete({ id }: { id: number }) {
+type DeleteProps = {
+  name: string;
+  deleteFn: () => void;
+  loading: boolean;
+};
+
+export function DeletModal({ deleteFn, loading, name }: DeleteProps) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <TooltipIconButton
           content="Delete"
@@ -27,16 +38,29 @@ export function RegionDelete({ id }: { id: number }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Share link</DialogTitle>
+          <DialogTitle>Delete {name}</DialogTitle>
           <DialogDescription>
-            Anyone who has this link will be able to view this.
+            Are you sure wanted to delete this {name.toLowerCase()}?. All other
+            functionalities related to this {name.toLowerCase()} will be
+            stopped.
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center space-x-2"></div>
         <DialogFooter className="sm:justify-start">
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => {
+              deleteFn();
+              setOpen(false);
+            }}
+            disabled={loading}
+          >
+            Delete
+          </Button>
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
+            <Button type="button" variant="outline">
+              Cancel
             </Button>
           </DialogClose>
         </DialogFooter>

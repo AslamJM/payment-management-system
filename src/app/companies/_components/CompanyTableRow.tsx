@@ -2,35 +2,35 @@
 
 import TooltipIconButton from "~/components/common/TooltipIconButton";
 import { Input } from "~/components/ui/input";
-import { type Region } from "@prisma/client";
+import { type Company } from "@prisma/client";
 import { Check, Edit, X } from "lucide-react";
 import { useState } from "react";
 import { TableCell, TableRow } from "~/components/ui/table";
 import { api } from "~/trpc/react";
 import { DeletModal } from "~/components/common/DeleteModal";
 
-const RegionTableRow = ({ region }: { region: Region }) => {
+const CompanyTableRow = ({ company }: { company: Company }) => {
   const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState(region.name);
+  const [name, setName] = useState(company.name);
   const [err, setErr] = useState("");
 
   const utils = api.useUtils();
-  const update = api.regions.update.useMutation();
+  const update = api.company.update.useMutation();
 
-  const updateRegion = () => {
+  const updateCompany = () => {
     if (name === "") {
       return;
     }
-    if (name === region.name) {
+    if (name === company.name) {
       setEditMode(false);
     }
     update.mutate(
-      { id: region.id, update: { name } },
+      { id: company.id, update: { name } },
       {
         onSuccess: (data) => {
           if (data) {
             if (data.success) {
-              utils.regions.all.setData(undefined, (old) => {
+              utils.company.all.setData(undefined, (old) => {
                 if (old) {
                   const updated = old.map((r) =>
                     r.id === data.data?.id ? data.data : r,
@@ -48,14 +48,14 @@ const RegionTableRow = ({ region }: { region: Region }) => {
     );
   };
 
-  const deleteRegion = () => {
+  const deleteCompany = () => {
     update.mutate(
-      { id: region.id, update: { status: false } },
+      { id: company.id, update: { status: false } },
       {
         onSuccess: (data) => {
           if (data?.success) {
-            utils.regions.all.setData(undefined, (old) => {
-              return old?.filter((rg) => rg.id !== region.id);
+            utils.company.all.setData(undefined, (old) => {
+              return old?.filter((rg) => rg.id !== company.id);
             });
           }
         },
@@ -72,7 +72,7 @@ const RegionTableRow = ({ region }: { region: Region }) => {
             <p className="text-sm font-medium text-destructive">{err}</p>
           </div>
         ) : (
-          <>{region.name}</>
+          <>{company.name}</>
         )}
       </TableCell>
       <TableCell className="w-1/4">
@@ -81,7 +81,7 @@ const RegionTableRow = ({ region }: { region: Region }) => {
             <TooltipIconButton
               content="OK"
               onClick={() => {
-                updateRegion();
+                updateCompany();
               }}
             >
               <Check className="h-4 w-4 text-green-500" />
@@ -90,7 +90,7 @@ const RegionTableRow = ({ region }: { region: Region }) => {
               content="Cancel"
               onClick={() => {
                 setEditMode(false);
-                setName(region.name);
+                setName(company.name);
               }}
             >
               <X className="h-4 w-4 text-red-600" />
@@ -107,9 +107,9 @@ const RegionTableRow = ({ region }: { region: Region }) => {
               <Edit className="h-4 w-4 text-orange-500" />
             </TooltipIconButton>
             <DeletModal
-              deleteFn={deleteRegion}
+              deleteFn={deleteCompany}
               loading={update.isPending}
-              name="Area"
+              name="Company"
             />
           </div>
         )}
@@ -118,4 +118,4 @@ const RegionTableRow = ({ region }: { region: Region }) => {
   );
 };
 
-export default RegionTableRow;
+export default CompanyTableRow;

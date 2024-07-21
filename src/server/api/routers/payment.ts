@@ -1,4 +1,5 @@
-import { createPaymentSchema, updatePaymentSchema } from "~/schemas/payment"
+import { type Prisma } from "@prisma/client"
+import { createPaymentSchema, paymentQueryParams, updatePaymentSchema } from "~/schemas/payment"
 import {
     createTRPCRouter,
     protectedProcedure,
@@ -24,22 +25,50 @@ export const paymentRouter = createTRPCRouter({
         }
     }),
 
-    all: protectedProcedure.query(async ({ ctx }) => {
-        return ctx.db.payment.findMany({
-            where: { status: true },
-            include: {
-                shop: {
-                    include: { region: true }
-                },
-                collector: true,
-                company: true
+    all: protectedProcedure.input(paymentQueryParams).query(async ({ ctx, input }) => {
+        try {
+            let params: Prisma.PaymentFindManyArgs['where'] = { status: true }
+            let take = 100
+
+            if (input) {
+
+                if (input.where) {
+                    params = { ...input.where, status: true }
+                }
+
+                if (input.take) {
+                    take = input.take
+                }
+
             }
-        })
+
+            return ctx.db.payment.findMany({
+                where: params,
+                include: {
+                    shop: {
+                        include: { region: true }
+                    },
+                    collector: true,
+                    company: true
+                },
+                take
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }),
 
     update: protectedProcedure.input(updatePaymentSchema).mutation(async ({ ctx, input }) => {
         try {
-            const updated = await ctx.db.payment.update({ where: { id: input.id }, data: input.update })
+            const updated = await ctx.db.payment.update({
+                where: { id: input.id }, data: input.update, include: {
+                    shop: {
+                        include: { region: true }
+                    },
+                    collector: true,
+                    company: true
+                }
+            })
             return {
                 success: true,
                 data: updated,
