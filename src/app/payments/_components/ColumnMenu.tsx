@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, MoreHorizontal } from "lucide-react";
+import { Check, MoreHorizontal, Trash, X } from "lucide-react";
 import { useState, type FC } from "react";
 import CreatePaymentForm from "~/app/_components/payments/CreatePaymentForm";
 import { Button } from "~/components/ui/button";
@@ -33,7 +33,14 @@ const ColumnMenu: FC<ColumnMenuProps> = ({ payment }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <div className="flex items-center justify-between">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <X
+            className=" h-3 w-3 cursor-pointer text-red-600"
+            onClick={() => setOpen(false)}
+          />
+        </div>
+
         <DropdownMenuItem
           onClick={() => {
             //
@@ -49,7 +56,9 @@ const ColumnMenu: FC<ColumnMenuProps> = ({ payment }) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <CreatePaymentForm payment={payment} />
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Trash className="mr-2 h-4 w-4 text-red-500" /> Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

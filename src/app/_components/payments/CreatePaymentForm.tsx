@@ -20,7 +20,15 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { useValues } from "~/hooks/useValues";
+import { diffObject } from "~/lib/diffObject";
 
 import {
   createDefaultValues,
@@ -28,6 +36,7 @@ import {
   type WholePayment,
   type CreatePaymentInput,
   type PaymentCreate,
+  updatePaymentSchema,
 } from "~/schemas/payment";
 import { api } from "~/trpc/react";
 
@@ -123,7 +132,21 @@ const CreatePaymentForm = ({ payment }: Props) => {
       return;
     }
 
-    //updatePayment.mutate({ id: payment.id, update: values });
+    const update = diffObject(createDefaultValues(payment), values);
+
+    const updateInput = { id: payment.id, update };
+
+    const p = updatePaymentSchema.safeParse(updateInput);
+
+    if (p.success) {
+      updatePayment.mutate({ id: payment.id, update });
+    } else {
+      p.error.errors.forEach((err) => {
+        form.setError(err.path as unknown as keyof CreatePaymentInput, {
+          message: err.message,
+        });
+      });
+    }
   };
 
   const total = form.watch("total");
@@ -252,7 +275,12 @@ const CreatePaymentForm = ({ payment }: Props) => {
                   <FormItem>
                     <FormLabel>Total Amount</FormLabel>
                     <FormControl>
-                      <Input placeholder="Total" {...field} type="number" />
+                      <Input
+                        placeholder="Total"
+                        {...field}
+                        type="number"
+                        onChange={(e) => field.onChange(+e.target.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -268,7 +296,11 @@ const CreatePaymentForm = ({ payment }: Props) => {
                   <FormItem>
                     <FormLabel>Paid</FormLabel>
                     <FormControl>
-                      <Input {...field} type="number" />
+                      <Input
+                        {...field}
+                        type="number"
+                        onChange={(e) => field.onChange(+e.target.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -281,7 +313,11 @@ const CreatePaymentForm = ({ payment }: Props) => {
                   <FormItem>
                     <FormLabel>Free</FormLabel>
                     <FormControl>
-                      <Input {...field} type="number" />
+                      <Input
+                        {...field}
+                        type="number"
+                        onChange={(e) => field.onChange(+e.target.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -294,7 +330,11 @@ const CreatePaymentForm = ({ payment }: Props) => {
                   <FormItem>
                     <FormLabel>Discount</FormLabel>
                     <FormControl>
-                      <Input {...field} type="number" />
+                      <Input
+                        {...field}
+                        type="number"
+                        onChange={(e) => field.onChange(+e.target.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -307,7 +347,11 @@ const CreatePaymentForm = ({ payment }: Props) => {
                   <FormItem>
                     <FormLabel>Saleable Return</FormLabel>
                     <FormControl>
-                      <Input {...field} type="number" />
+                      <Input
+                        {...field}
+                        type="number"
+                        onChange={(e) => field.onChange(+e.target.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -320,7 +364,11 @@ const CreatePaymentForm = ({ payment }: Props) => {
                   <FormItem>
                     <FormLabel>Market Return</FormLabel>
                     <FormControl>
-                      <Input {...field} type="number" />
+                      <Input
+                        {...field}
+                        type="number"
+                        onChange={(e) => field.onChange(+e.target.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -339,15 +387,36 @@ const CreatePaymentForm = ({ payment }: Props) => {
                   </FormItem>
                 )}
               />
-            </div>
-
-            <div>
-              <Button
-                disabled={create.isPending || updatePayment.isPending}
-                type="submit"
-              >
-                {payment ? "Update" : "Create"}
-              </Button>
+              <FormField
+                control={form.control}
+                name="payment_status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Payment Status</FormLabel>
+                    <FormControl>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Payment Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="PAID">Paid</SelectItem>
+                          <SelectItem value="DUE">Due</SelectItem>
+                          <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div>
+                <Button
+                  disabled={create.isPending || updatePayment.isPending}
+                  type="submit"
+                >
+                  {payment ? "Update" : "Create"}
+                </Button>
+              </div>
             </div>
           </form>
         </Form>
