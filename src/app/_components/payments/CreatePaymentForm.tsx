@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ComboBox from "~/components/common/ComboBox";
 import DatePickerWithLabel from "~/components/common/DatePickerWithLabel";
-import TooltipIconButton from "~/components/common/TooltipIconButton";
 import { Button } from "~/components/ui/button";
 
 import { Dialog, DialogContent, DialogHeader } from "~/components/ui/dialog";
+import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -50,7 +50,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
   const create = api.payment.create.useMutation({
     onSuccess: async (data) => {
       if (data?.success) {
-        utils.payment.all.setData(undefined, (old: unknown) => {
+        utils.payment.all.setData({}, (old: unknown) => {
           if (Array.isArray(old)) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment
             return [data.data, ...old];
@@ -67,7 +67,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
   const updatePayment = api.payment.update.useMutation({
     onSuccess: (data) => {
       if (data.success) {
-        utils.payment.all.setData(undefined, (old) => {
+        utils.payment.all.setData({}, (old) => {
           return old?.map((s) => (s.id === data.data?.id ? data.data : s));
         });
       }
@@ -138,9 +138,9 @@ const CreatePaymentForm = ({ payment }: Props) => {
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         {payment ? (
-          <TooltipIconButton content="Edit">
-            <Edit className="h-4 w-4 text-orange-500" />
-          </TooltipIconButton>
+          <DropdownMenuItem>
+            <Edit className="mr-2 h-4 w-4 text-orange-500" /> Edit
+          </DropdownMenuItem>
         ) : (
           <Button>
             <Pencil />

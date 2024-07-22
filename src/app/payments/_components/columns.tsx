@@ -4,6 +4,7 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { daysSince } from "~/lib/utils";
 
 import { type WholePayment } from "~/schemas/payment";
+import ColumnMenu from "./ColumnMenu";
 
 export const paymentColumns: ColumnDef<WholePayment>[] = [
   {
@@ -45,6 +46,7 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "shop",
     accessorFn: (row) => row.shop.region.name,
+    id: "area",
     header: "Area",
   },
   {
@@ -93,5 +95,9 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
     header: "Credit Period",
     accessorFn: (row) => row.payment_date,
     cell: ({ row }) => daysSince(row.original.payment_date) + " days",
+  },
+  {
+    id: "Action",
+    cell: ({ row }) => <ColumnMenu payment={row.original} />,
   },
 ];

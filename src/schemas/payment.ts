@@ -66,7 +66,7 @@ export const createPaymentHistorySchema = z.object({
 const paymentQueryWhere = z.object({
     collector_id: z.number(),
     shop_id: z.number(),
-    comapny_id: z.number(),
+    company_id: z.number(),
     invoice_number: z.string(),
     payment_status: z.enum(["PAID", "DUE", "CANCELLED"]),
     payment_date: z.object({

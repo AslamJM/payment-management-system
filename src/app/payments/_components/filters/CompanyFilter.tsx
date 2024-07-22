@@ -1,25 +1,17 @@
 "use client";
 
-import ComboBox from "~/components/common/ComboBox";
 import { useValues } from "~/hooks/useValues";
-import { type FilterProps } from "./filterProps";
+import ComboBoxWithLabel from "./ComboBoxWithLabel";
 
-const CompanyFilter = ({ getvalue, setValue }: FilterProps) => {
+const CompanyFilter = () => {
   const { companyValues } = useValues();
-
-  const fieldValue = getvalue<number>("company_id");
-
-  const onSelect = async (id: number) => {
-    setValue("company_id", id);
-  };
 
   return (
     <div>
-      <ComboBox
-        values={companyValues}
-        fieldValue={fieldValue}
+      <ComboBoxWithLabel
         name="Company"
-        onSelect={onSelect}
+        objectKey="company_id"
+        values={companyValues}
       />
     </div>
   );
