@@ -18,6 +18,7 @@ import {
 } from "~/components/ui/popover";
 import { type Key, useQueryParams } from "~/hooks/useQueryParams";
 import { cn } from "~/lib/utils";
+import ResetSingleFilter from "./ResetSingleFilter";
 
 type CommandValue = {
   id: number;
@@ -48,7 +49,10 @@ const ComboBoxWithLabel: FC<ComboBoxWithLabelProps> = ({
 
   return (
     <div className="space-y-1">
-      <Label className="text-sm font-medium leading-none">{name}</Label>
+      <div className="flex items-center justify-between">
+        <Label className="text-sm font-medium leading-none">{name}</Label>
+        <ResetSingleFilter objKey={objectKey} />
+      </div>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

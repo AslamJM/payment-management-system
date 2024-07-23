@@ -9,6 +9,7 @@ import VerifiedFilter from "./filters/VerifiedFilter";
 import DateRangeFilter from "./filters/DateRangeFilter";
 import { Button } from "~/components/ui/button";
 import { RefreshCcw } from "lucide-react";
+import ResetSingleFilter from "./filters/ResetSingleFilter";
 
 const TableFilters = () => {
   const where = useQueryParams((state) => state.where);
@@ -29,7 +30,10 @@ const TableFilters = () => {
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         <div>
-          <Label>Payment Date</Label>
+          <div className="mb-1 flex items-center justify-between">
+            <Label>Payment Date</Label>
+            <ResetSingleFilter objKey="payment_date" />
+          </div>
           <DatePickerWithLabel date={date ?? null} setDate={setDate} />
         </div>
         <DateRangeFilter />

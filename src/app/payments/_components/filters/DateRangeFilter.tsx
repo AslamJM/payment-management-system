@@ -1,6 +1,7 @@
 import DatePickerWithLabel from "~/components/common/DatePickerWithLabel";
 import { Label } from "~/components/ui/label";
 import { useQueryParams } from "~/hooks/useQueryParams";
+import ResetSingleFilter from "./ResetSingleFilter";
 
 const DateRangeFilter = () => {
   const date = useQueryParams((state) => state.where).payment_date;
@@ -18,11 +19,17 @@ const DateRangeFilter = () => {
   return (
     <div className="col-span-2 grid grid-cols-2 gap-4">
       <div>
-        <Label>From</Label>
+        <div className="mb-1 flex items-center justify-between">
+          <Label>From</Label>
+          <ResetSingleFilter objKey="payment_date" />
+        </div>
         <DatePickerWithLabel date={from ?? null} setDate={setFrom} />
       </div>
       <div>
-        <Label>To</Label>
+        <div className="mb-1 flex items-center justify-between">
+          <Label>To</Label>
+          <ResetSingleFilter objKey="payment_date" />
+        </div>
         <DatePickerWithLabel date={to ?? null} setDate={setTo} />
       </div>
     </div>

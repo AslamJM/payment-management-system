@@ -9,13 +9,18 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useQueryParams } from "~/hooks/useQueryParams";
+import ResetSingleFilter from "./ResetSingleFilter";
 
 const VerifiedFilter = () => {
   const addParams = useQueryParams((state) => state.addParam);
   const verified = useQueryParams((state) => state.where.verified);
   return (
     <div className="space-y-1">
-      <Label>Verifed Status</Label>
+      <div className="flex items-center justify-between">
+        <Label>Verifed Status</Label>
+        <ResetSingleFilter objKey="verified" />
+      </div>
+
       <Select
         value={verified !== undefined ? (verified ? "true" : "false") : ""}
         onValueChange={(v) =>
