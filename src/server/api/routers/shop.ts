@@ -1,3 +1,4 @@
+import { z } from "zod"
 import { handlerError } from "~/lib/handleError"
 import { createShopSchema, updateShopSchema } from "~/schemas/shop"
 import {
@@ -42,5 +43,20 @@ export const shopRouter = createTRPCRouter({
                 message: "update failed"
             }
         }
+    }),
+
+    search: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+        const shop = await ctx.db.shop.findFirst({
+            where: { name: input }, select: {
+                payments: {
+                    select: {
+                        id: true, invoice_number: true, total: true, payment_date: true,
+                        due: true, company: { select: { name: true } }
+                    },
+                    where: { payment_status: "DUE" }
+                }
+            }
+        })
+        return shop?.payments
     })
 })

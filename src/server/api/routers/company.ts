@@ -1,3 +1,4 @@
+import { endOfMonth, startOfMonth } from "date-fns"
 import { handlerError } from "~/lib/handleError"
 import { createCompanySchema, updateCompanySchema } from "~/schemas/company"
 import {
@@ -36,5 +37,31 @@ export const companyRouter = createTRPCRouter({
         } catch (error) {
             return handlerError(error)
         }
+    }),
+
+    paymentsThisMonth: protectedProcedure.query(async ({ ctx }) => {
+        const companies = await ctx.db.company.findMany({
+            where: { status: true }, select: {
+                id: true,
+                name: true,
+                payments: {
+                    select: {
+                        total: true
+                    },
+                    where: {
+                        payment_date: {
+                            gte: startOfMonth(new Date()),
+                            lte: endOfMonth(new Date())
+                        }
+                    }
+                }
+            }
+        })
+
+        return companies.map(c => ({
+            id: c.id,
+            name: c.name,
+            total: c.payments.reduce((acc, p) => acc + p.total, 0)
+        }))
     })
 })

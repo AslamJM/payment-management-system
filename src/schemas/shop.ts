@@ -18,3 +18,14 @@ export const updateShopSchema = z.object({
 
 export type CreateShopInput = z.infer<typeof createShopSchema>
 export type UpdateShopInput = z.infer<typeof updateShopSchema>
+
+export type ShopSeachRow = {
+    company: {
+        name: string;
+    };
+    id: number;
+    invoice_number: string;
+    total: number;
+    due: number;
+    payment_date: Date;
+}

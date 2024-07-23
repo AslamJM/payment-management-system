@@ -12,6 +12,7 @@ export const paymentRouter = createTRPCRouter({
             const created = await ctx.db.payment.create({
                 data: input
             })
+            await ctx.db.paymentHistory.create({ data: { amount: input.paid, date: input.payment_date, collector_id: input.collector_id, payment_id: created.id } })
             return {
                 success: true,
                 data: created,
