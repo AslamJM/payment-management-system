@@ -1,4 +1,5 @@
 import { type Prisma } from "@prisma/client"
+import { number, z } from "zod"
 import { createPaymentSchema, paymentQueryParams, updatePaymentSchema } from "~/schemas/payment"
 import {
     createTRPCRouter,
@@ -79,6 +80,21 @@ export const paymentRouter = createTRPCRouter({
                 success: false,
                 data: null,
                 message: "update failed"
+            }
+        }
+    }),
+
+    verifyPayments: protectedProcedure.input(z.array(number())).mutation(async ({ ctx, input }) => {
+        try {
+            await ctx.db.payment.updateMany({ where: { id: { in: input } }, data: { verified: true } })
+            return {
+                success: true,
+                message: "verification success"
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: "verification failed"
             }
         }
     })

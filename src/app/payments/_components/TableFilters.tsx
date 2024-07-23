@@ -35,7 +35,7 @@ const TableFilters = () => {
         <DateRangeFilter />
         <div className="flex items-end">
           <Button onClick={reset}>
-            <RefreshCcw className="mr-2" />
+            <RefreshCcw className="mr-2 h-4 w-4" />
             Reset Filters
           </Button>
         </div>

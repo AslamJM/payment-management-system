@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { useQueryParams } from "~/hooks/useQueryParams";
 import { useValues } from "~/hooks/useValues";
 import { diffObject } from "~/lib/diffObject";
 
@@ -42,6 +43,7 @@ import { api } from "~/trpc/react";
 
 type Props = {
   payment: WholePayment | null;
+  close?: () => void;
 };
 
 const CreatePaymentForm = ({ payment }: Props) => {
@@ -55,11 +57,12 @@ const CreatePaymentForm = ({ payment }: Props) => {
   });
 
   const utils = api.useUtils();
+  const params = useQueryParams((state) => state.where);
 
   const create = api.payment.create.useMutation({
     onSuccess: async (data) => {
       if (data?.success) {
-        utils.payment.all.setData({}, (old: unknown) => {
+        utils.payment.all.setData({ where: params }, (old: unknown) => {
           if (Array.isArray(old)) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment
             return [data.data, ...old];
@@ -76,12 +79,17 @@ const CreatePaymentForm = ({ payment }: Props) => {
   const updatePayment = api.payment.update.useMutation({
     onSuccess: (data) => {
       if (data.success) {
-        utils.payment.all.setData({}, (old) => {
+        console.log(data.data);
+
+        utils.payment.all.setData({ where: params }, (old) => {
+          console.log("hear");
+
           return old?.map((s) => (s.id === data.data?.id ? data.data : s));
         });
       }
 
       setDialogOpen(false);
+      if (close) close();
     },
   });
 
@@ -393,23 +401,23 @@ const CreatePaymentForm = ({ payment }: Props) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Payment Status</FormLabel>
-                    <FormControl>
-                      <Select>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Payment Status" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="PAID">Paid</SelectItem>
-                          <SelectItem value="DUE">Due</SelectItem>
-                          <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="PAID">Paid</SelectItem>
+                        <SelectItem value="DUE">Due</SelectItem>
+                        <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div>
+              <div className="flex items-end">
                 <Button
                   disabled={create.isPending || updatePayment.isPending}
                   type="submit"

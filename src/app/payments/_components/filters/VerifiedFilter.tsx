@@ -17,7 +17,7 @@ const VerifiedFilter = () => {
     <div className="space-y-1">
       <Label>Verifed Status</Label>
       <Select
-        value={verified ? "true" : "false"}
+        value={verified !== undefined ? (verified ? "true" : "false") : ""}
         onValueChange={(v) =>
           addParams("verified", v === "true" ? true : false)
         }

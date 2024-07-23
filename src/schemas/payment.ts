@@ -46,8 +46,7 @@ export const paymentSchemaRhf = z.object({
     collector_id: z.number().nullable(),
     company_id: z.number().nullable(),
     shop_id: z.number().nullable(),
-    payment_date: z.date()
-
+    payment_date: z.date(),
 })
 
 export const updatePaymentSchema = z.object({
