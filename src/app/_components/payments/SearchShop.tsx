@@ -106,7 +106,7 @@ const SearchShop = () => {
                 ]}
               />
               {payments.map((p) => (
-                <SearchRow row={p} key={p.id} />
+                <SearchRow row={p} key={p.id} shopName={name} />
               ))}
             </Table>
           )

@@ -15,17 +15,38 @@ import { api } from "~/trpc/react";
 
 interface SearchRowProps {
   row: ShopSeachRow;
+  shopName: string;
 }
 
-const SearchRow: FC<SearchRowProps> = ({ row }) => {
+const SearchRow: FC<SearchRowProps> = ({ row, shopName }) => {
   const [collector_id, setCollectorId] = useState<number | null>(null);
   const [date, setDate] = useState(new Date());
   const [amount, setAmount] = useState("");
   const { id, company, due, total, invoice_number, payment_date } = row;
 
+  const utils = api.useUtils();
   const { collectorValues } = useValues();
 
-  const history = api.history.create.useMutation();
+  const history = api.history.create.useMutation({
+    onSuccess: (data) => {
+      if (data.success) {
+        if (amount === row.due.toString()) {
+          utils.shops.search.setData(shopName, (old) => {
+            return old?.filter((p) => p.id !== id);
+          });
+        } else {
+          utils.shops.search.setData(shopName, (old) => {
+            return old?.map((p) =>
+              p.id === id ? { ...p, due: p.due - Number(amount) } : p,
+            );
+          });
+        }
+        setCollectorId(null);
+        setDate(new Date());
+        setAmount("");
+      }
+    },
+  });
 
   const disabled = history.isPending || !collector_id || !amount;
 

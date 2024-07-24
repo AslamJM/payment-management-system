@@ -179,7 +179,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[800px]">
         <DialogHeader>
           <DialogTitle>{payment ? "Edit" : "Create"} Payment</DialogTitle>
         </DialogHeader>
