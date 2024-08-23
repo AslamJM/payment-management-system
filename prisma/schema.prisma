@@ -145,6 +145,7 @@ model Payment {
    saleable_return Float
    market_return Float 
    payment_date DateTime
+   due_date DateTime
    verified Boolean @default(false)
    payment_status PaymentStatus @default(DUE)
     status Boolean @default(true)
@@ -156,9 +157,9 @@ model Payment {
    company_id Int
    collector_id Int
 
-   shop Shop @relation(fields: [shop_id],references: [id])
-   company Company @relation(fields: [company_id],references: [id])
-   collector Collector @relation(fields: [collector_id],references: [id])
+   shop Shop @relation(fields: [shop_id],references: [id],onDelete: Cascade)
+   company Company @relation(fields: [company_id],references: [id],onDelete: Cascade)
+   collector Collector @relation(fields: [collector_id],references: [id],onDelete: Cascade)
    histories PaymentHistory[]
 
 }
@@ -170,8 +171,8 @@ model PaymentHistory{
    payment_id Int
    collector_id Int 
 
-   payment Payment @relation(fields: [payment_id],references: [id]) 
-    collector Collector @relation(fields: [collector_id],references: [id])
+   payment Payment @relation(fields: [payment_id],references: [id],onDelete: Cascade) 
+    collector Collector @relation(fields: [collector_id],references: [id],onDelete: Cascade)
 
     status Boolean @default(true)
    created_at DateTime @default(now())

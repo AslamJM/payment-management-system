@@ -29,7 +29,8 @@ export const createPaymentSchema = z.object({
     collector_id: z.number(),
     company_id: z.number(),
     shop_id: z.number(),
-    payment_date: z.date()
+    payment_date: z.date(),
+    due_date: z.date()
 
 })
 
@@ -47,6 +48,7 @@ export const paymentSchemaRhf = z.object({
     company_id: z.number().nullable(),
     shop_id: z.number().nullable(),
     payment_date: z.date(),
+    due_date: z.date()
 })
 
 export const updatePaymentSchema = z.object({
@@ -102,7 +104,7 @@ export function createDefaultValues(data: WholePayment | null): CreatePaymentInp
             free: 0, market_return: 0,
             saleable_return: 0, invoice_number: "",
             payment_status: "PAID", payment_date: new Date(),
-            collector_id: null, company_id: null, shop_id: null
+            collector_id: null, company_id: null, shop_id: null, due_date: new Date()
         }
     }
     return {
@@ -110,6 +112,6 @@ export function createDefaultValues(data: WholePayment | null): CreatePaymentInp
         free: data.free, market_return: data.market_return,
         saleable_return: data.saleable_return, invoice_number: data.invoice_number,
         payment_status: data.payment_status, payment_date: data.payment_date,
-        collector_id: data.collector_id, company_id: data.company_id, shop_id: data.shop_id
+        collector_id: data.collector_id, company_id: data.company_id, shop_id: data.shop_id, due_date: data.due_date
     }
 }
