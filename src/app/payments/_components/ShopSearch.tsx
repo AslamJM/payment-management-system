@@ -19,14 +19,23 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { useState } from "react";
-import { Check, ChevronsUpDown, Search } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2, Search } from "lucide-react";
 import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+import SimpleTableHeader from "~/components/common/SimpleTableHeader";
+import { Table, TableBody } from "~/components/ui/table";
 
 const ShopSearch = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<number | null>(null);
+  const [enabled, setEnabled] = useState(false);
 
   const { shopValues } = useValues();
+
+  const { data, isLoading } = api.payment.duePaymentsShop.useQuery(value!, {
+    enabled: enabled,
+  });
+
   return (
     <CardWrapper title="Shop Search">
       <div className="space-y-2">
@@ -78,7 +87,32 @@ const ShopSearch = () => {
             Search
           </Button>
         </div>
-        <div></div>
+        <div className="py-4">
+          {isLoading && (
+            <div>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+              <span className="text-sm text-muted">Searching...</span>
+            </div>
+          )}
+          {data && (
+            <Table>
+              <SimpleTableHeader
+                heads={[
+                  "Invoice Date",
+                  "Invoice",
+                  "Company",
+                  "Total",
+                  "Due",
+                  "Collector",
+                  "Date",
+                  "Amount",
+                  "Action",
+                ]}
+              />
+              <TableBody></TableBody>
+            </Table>
+          )}
+        </div>
       </div>
     </CardWrapper>
   );

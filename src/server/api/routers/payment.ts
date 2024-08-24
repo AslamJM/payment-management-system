@@ -98,5 +98,32 @@ export const paymentRouter = createTRPCRouter({
                 message: "verification failed"
             }
         }
+    }),
+
+    duePaymentsShop: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
+        const shop_id = input
+
+        const payments = ctx.db.payment.findMany({
+            where: {
+                shop_id, status: true, due: {
+                    gt: 0
+                }
+            },
+            select: {
+                id: true,
+                payment_date: true,
+                invoice_number: true,
+                company: {
+                    select: {
+                        name: true
+                    },
+
+                },
+                total: true,
+                due: true
+            }
+        })
+
+        return payments
     })
 })

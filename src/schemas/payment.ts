@@ -115,3 +115,14 @@ export function createDefaultValues(data: WholePayment | null): CreatePaymentInp
         collector_id: data.collector_id, company_id: data.company_id, shop_id: data.shop_id, due_date: data.due_date
     }
 }
+
+export type DuePaymentSearchResult = {
+    company: {
+        name: string;
+    };
+    invoice_number: string;
+    payment_date: Date;
+    due: number;
+    total: number;
+    id: number;
+}

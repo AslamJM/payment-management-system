@@ -62,7 +62,6 @@ export const shopRouter = createTRPCRouter({
 
     duePaymentsForMonth: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
         const month = input
-
         const paymnents = await ctx.db.payment.findMany({
 
         })
