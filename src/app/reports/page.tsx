@@ -1,5 +1,7 @@
+import ReportsMain from "./_components/ReportsMain";
+
 const ReportsPage = () => {
-  return <div>ReportsPage</div>;
+  return <ReportsMain />;
 };
 
 export default ReportsPage;

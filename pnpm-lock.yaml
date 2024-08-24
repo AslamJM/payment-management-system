@@ -101,6 +101,9 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
+      sl-currency-formatter:
+        specifier: ^1.0.1
+        version: 1.0.1
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -2433,6 +2436,9 @@ packages:
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
+
+  sl-currency-formatter@1.0.1:
+    resolution: {integrity: sha512-NJ7iyQHhbpVmggohp1zpiMCAcoKfBQ1WEPvgKGXp0HVluX3UzBCguADYuFlYp7TR0nC6bQcA86We9J9b8E2ESQ==}
 
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -5160,6 +5166,8 @@ snapshots:
       object-inspect: 1.13.2
 
   signal-exit@4.1.0: {}
+
+  sl-currency-formatter@1.0.1: {}
 
   slash@3.0.0: {}
 

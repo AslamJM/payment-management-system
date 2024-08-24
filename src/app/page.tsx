@@ -7,10 +7,10 @@ export default async function Home() {
     <main className="space-y-4">
       <CreatePaymentForm payment={null} />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="md:w-1/2">
+        <div>
           <PaymentsThisMonth />
         </div>
-        <div></div>
+        <div className=""></div>
       </div>
       <SearchShop />
     </main>

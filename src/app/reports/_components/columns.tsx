@@ -1,11 +1,13 @@
-import { type ColumnDef } from "@tanstack/react-table";
+import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Checkbox } from "~/components/ui/checkbox";
 import { daysSince } from "~/lib/utils";
 
 import { type WholePayment } from "~/schemas/payment";
+import { DataTableColumnHeader } from "./ReportsTableHeader";
+import ShopSelect from "./filters/ShopSelect";
 
-export const paymentColumns: ColumnDef<WholePayment>[] = [
+export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -29,13 +31,23 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "payment_date",
+    header: (c) => <DataTableColumnHeader {...c} title="Payment Date" />,
+    cell: ({ cell }) => format(cell.getValue<Date>(), "dd/MM/yyyy"),
+  },
+  {
     accessorKey: "invoice_number",
     header: "Invoice",
   },
   {
     accessorKey: "shop",
     accessorFn: (row) => row.shop.name,
-    header: "Shop",
+    header: ({ column }) => (
+      <div>
+        <DataTableColumnHeader title="Shop" column={column} />
+        <ShopSelect column={column} />
+      </div>
+    ),
   },
   {
     accessorKey: "company",
@@ -85,11 +97,7 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
     accessorFn: (row) => row.collector.name,
     header: "Collector",
   },
-  {
-    accessorKey: "payment_date",
-    header: "Invoice Date",
-    cell: ({ cell }) => format(cell.getValue<Date>(), "dd/MM/yyyy"),
-  },
+
   {
     header: "Credit Period",
     accessorFn: (row) => row.payment_date,

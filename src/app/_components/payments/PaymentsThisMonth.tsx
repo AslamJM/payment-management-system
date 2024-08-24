@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import CardWrapper from "~/components/common/CardWrapper";
 import SimpleTableHeader from "~/components/common/SimpleTableHeader";
 import { Table, TableCell, TableRow } from "~/components/ui/table";
+import { rupees } from "~/lib/utils";
 import { api } from "~/trpc/server";
 
 const PaymentsThisMonth = async () => {
@@ -16,7 +17,7 @@ const PaymentsThisMonth = async () => {
         {payments.map((c) => (
           <TableRow key={c.id}>
             <TableCell>{c.name}</TableCell>
-            <TableCell>{c.total}</TableCell>
+            <TableCell align="right">{rupees(c.total)}</TableCell>
           </TableRow>
         ))}
       </Table>
