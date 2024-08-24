@@ -7,6 +7,7 @@ import {
   User,
   Users,
   FileArchive,
+  PoundSterling,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -36,6 +37,17 @@ const SideNav = () => {
             </Link>
           </TooltipTrigger>
           <TooltipContent side="right">Payments</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              href="/daily-sales"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            >
+              <PoundSterling className="h-5 w-5" />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="right">Daily Sales</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>

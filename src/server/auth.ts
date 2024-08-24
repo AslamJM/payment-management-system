@@ -56,16 +56,12 @@ export const authOptions: NextAuthOptions = {
         password: {},
       },
       async authorize(credentials) {
-        console.log("credentials-->", credentials);
 
         const user = await db.user.findUnique({ where: { username: credentials?.username } })
         if (user) {
-          console.log("user-->", user);
           return user
 
         }
-        console.log("none none none");
-
         return null;
       },
     }),

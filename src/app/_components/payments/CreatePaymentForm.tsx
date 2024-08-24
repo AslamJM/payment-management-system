@@ -174,7 +174,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
           </DropdownMenuItem>
         ) : (
           <Button>
-            <Pencil />
+            <Pencil className="mr-2 h-4 w-4" />
             Create Payment
           </Button>
         )}
@@ -249,7 +249,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
                 name="payment_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="block">Date</FormLabel>
+                    <FormLabel className="block">Invoice Date</FormLabel>
                     <DatePickerWithLabel
                       date={field.value}
                       setDate={field.onChange}
@@ -414,6 +414,19 @@ const CreatePaymentForm = ({ payment }: Props) => {
                       </SelectContent>
                     </Select>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="due_date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Due Date</FormLabel>
+                    <DatePickerWithLabel
+                      date={field.value}
+                      setDate={field.onChange}
+                    />
                   </FormItem>
                 )}
               />
