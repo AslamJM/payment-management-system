@@ -43,7 +43,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     accessorKey: "shop",
     accessorFn: (row) => row.shop.name,
     header: ({ column }) => (
-      <div>
+      <div className=" w-[120px] py-1">
         <DataTableColumnHeader title="Shop" column={column} />
         <ShopSelect column={column} />
       </div>

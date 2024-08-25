@@ -125,5 +125,24 @@ export const paymentRouter = createTRPCRouter({
         })
 
         return payments
+    }),
+
+    searchInvoice: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+        const payment = await ctx.db.payment.findUnique({
+            where: { invoice_number: input }, select: {
+                id: true,
+                payment_date: true,
+                invoice_number: true,
+                company: {
+                    select: {
+                        name: true
+                    },
+
+                },
+                total: true,
+                due: true
+            }
+        })
+        return payment
     })
 })

@@ -24,6 +24,7 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import SimpleTableHeader from "~/components/common/SimpleTableHeader";
 import { Table, TableBody } from "~/components/ui/table";
+import PaymentDueUpdate from "./PaymentDueUpdate";
 
 const ShopSearch = () => {
   const [open, setOpen] = useState(false);
@@ -65,6 +66,7 @@ const ShopSearch = () => {
                       key={c.value}
                       value={c.value}
                       onSelect={() => {
+                        setEnabled(false);
                         setValue(c.id);
                         setOpen(false);
                       }}
@@ -82,8 +84,8 @@ const ShopSearch = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          <Button>
-            <Search className="mr-2" />
+          <Button onClick={() => setEnabled(true)}>
+            <Search className="m-4 mr-2 h-4" />
             Search
           </Button>
         </div>
@@ -109,7 +111,11 @@ const ShopSearch = () => {
                   "Action",
                 ]}
               />
-              <TableBody></TableBody>
+              <TableBody>
+                {data.map((p) => (
+                  <PaymentDueUpdate key={p.id} p={p} shop_id={value!} />
+                ))}
+              </TableBody>
             </Table>
           )}
         </div>

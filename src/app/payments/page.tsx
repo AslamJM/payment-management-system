@@ -10,7 +10,7 @@ const PaymentsPage = () => {
       <div className="col-span-1">
         <PaymentsThisMonth />
       </div>
-      <div className="col-span-2 space-y-2">
+      <div className="col-span-2 space-y-4">
         <CreatePaymentForm payment={null} />
         <InvoiceSearch />
         <ShopSearch />
