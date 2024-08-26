@@ -33,18 +33,18 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "payment_date",
+    accessorFn: (row) => format(row.payment_date, "dd/MM/yyyy"),
     header: (c) => (
-      <div className=" w-[120px] py-1">
+      <div className="w-[100px] space-y-1 py-1">
         <DataTableColumnHeader {...c} title="Invoice Date" />
         <TextFilter column={c.column} name="date" />
       </div>
     ),
-    cell: ({ cell }) => format(cell.getValue<Date>(), "dd/MM/yyyy"),
   },
   {
     accessorKey: "invoice_number",
     header: (c) => (
-      <div className=" w-[120px] py-1">
+      <div className="w-[100px] space-y-1 py-1">
         <DataTableColumnHeader {...c} title="Invoice" />
         <TextFilter column={c.column} name="invoice" />
       </div>
@@ -54,7 +54,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     id: "shop",
     accessorKey: "shop.name",
     header: ({ column }) => (
-      <div className="  py-1">
+      <div className="space-y-1  py-1">
         <DataTableColumnHeader title="Shop" column={column} />
         <FilterComboBox column={column} item="shop" />
       </div>
@@ -64,7 +64,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     id: "company",
     accessorKey: "company.name",
     header: ({ column }) => (
-      <div className="py-1">
+      <div className="space-y-1 py-1">
         <DataTableColumnHeader title="Company" column={column} />
         <FilterComboBox column={column} item="company" />
       </div>
@@ -74,7 +74,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     accessorKey: "shop.region.name",
     id: "area",
     header: ({ column }) => (
-      <div className="py-1">
+      <div className="space-y-1 py-1">
         <DataTableColumnHeader title="Area" column={column} />
         <FilterComboBox column={column} item="area" />
       </div>
@@ -94,13 +94,13 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     header: (c) => (
-      <div className=" w-[120px] py-1">
+      <div className=" space-y-1 py-1">
         <DataTableColumnHeader {...c} title="Credit Period" />
         <TextFilter column={c.column} name="period" />
       </div>
     ),
     accessorKey: "due_date",
-    cell: ({ row }) => daysSince(row.original.due_date) + " days",
+    accessorFn: (row) => daysSince(row.due_date) + " days",
   },
   {
     accessorKey: "free",
@@ -124,8 +124,12 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     header: "Status",
   },
   {
-    accessorKey: "collector",
-    accessorFn: (row) => row.collector.name,
-    header: "Collector",
+    accessorKey: "collector.name",
+    header: ({ column }) => (
+      <div className="space-y-1  py-1">
+        <DataTableColumnHeader title="Collector" column={column} />
+        <FilterComboBox column={column} item="collector" />
+      </div>
+    ),
   },
 ];

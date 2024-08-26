@@ -12,6 +12,7 @@ const TextFilter: FC<TextFilterProps> = ({ column, name }) => {
   return (
     <div>
       <Input
+        className="font-normal text-muted-foreground"
         placeholder={`Filter ${name}`}
         onChange={(e) => column.setFilterValue(e.target.value)}
       />

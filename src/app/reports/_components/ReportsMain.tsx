@@ -5,7 +5,6 @@ import DateRange from "./DateRange";
 import { api } from "~/trpc/react";
 import ReportsTable from "./ReportsTable";
 import CardWrapper from "~/components/common/CardWrapper";
-import { ScrollArea } from "~/components/ui/scroll-area";
 
 const ReportsMain = () => {
   const [from, setFrom] = useState<Date | undefined>(undefined);
@@ -51,11 +50,7 @@ const ReportsMain = () => {
           fetchPayments={fetchPayments}
           loading={isLoading}
         />
-        {data && (
-          <ScrollArea className=" w-full whitespace-nowrap rounded-md border p-4">
-            <ReportsTable data={data} />
-          </ScrollArea>
-        )}
+        {data && <ReportsTable data={data} />}
       </div>
     </CardWrapper>
   );
