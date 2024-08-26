@@ -12,7 +12,7 @@ export function formatDate(date: string | Date) {
 }
 
 export function daysSince(date: Date) {
-  return differenceInDays(new Date(), date,)
+  return differenceInDays(date, new Date(),)
 }
 
 export function rupees(amount: number) {

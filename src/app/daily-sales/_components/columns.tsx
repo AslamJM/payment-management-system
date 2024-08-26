@@ -1,7 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Checkbox } from "~/components/ui/checkbox";
-import { daysSince } from "~/lib/utils";
+import { daysSince, rupees } from "~/lib/utils";
 
 import { type WholePayment } from "~/schemas/payment";
 import ColumnMenu from "./ColumnMenu";
@@ -30,6 +30,11 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "payment_date",
+    header: "Invoice Date",
+    cell: ({ cell }) => format(cell.getValue<Date>(), "dd/MM/yyyy"),
+  },
+  {
     accessorKey: "invoice_number",
     header: "Invoice",
   },
@@ -52,30 +57,37 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "total",
     header: "Total",
+    accessorFn: (row) => rupees(row.total),
   },
   {
     accessorKey: "paid",
     header: "Paid",
+    accessorFn: (row) => rupees(row.paid),
   },
   {
     accessorKey: "free",
     header: "Free",
+    accessorFn: (row) => rupees(row.free),
   },
   {
     accessorKey: "discount",
     header: "Discount",
+    accessorFn: (row) => rupees(row.discount),
   },
   {
     accessorKey: "saleable_return",
     header: "Saleable",
+    accessorFn: (row) => rupees(row.saleable_return),
   },
   {
     accessorKey: "market_return",
     header: "Market",
+    accessorFn: (row) => rupees(row.market_return),
   },
   {
     accessorKey: "due",
     header: "Due",
+    accessorFn: (row) => rupees(row.due),
   },
   {
     accessorKey: "payment_status",
@@ -86,15 +98,11 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
     accessorFn: (row) => row.collector.name,
     header: "Collector",
   },
-  {
-    accessorKey: "payment_date",
-    header: "Invoice Date",
-    cell: ({ cell }) => format(cell.getValue<Date>(), "dd/MM/yyyy"),
-  },
+
   {
     header: "Credit Period",
     accessorFn: (row) => row.payment_date,
-    cell: ({ row }) => daysSince(row.original.payment_date) + " days",
+    cell: ({ row }) => daysSince(row.original.due_date) + " days",
   },
   {
     id: "Action",

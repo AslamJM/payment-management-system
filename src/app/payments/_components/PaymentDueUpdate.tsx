@@ -8,6 +8,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { TableCell, TableRow } from "~/components/ui/table";
 import { useValues } from "~/hooks/useValues";
+import { rupees } from "~/lib/utils";
 import { type DuePaymentSearchResult } from "~/schemas/payment";
 import { api } from "~/trpc/react";
 
@@ -61,8 +62,8 @@ const PaymentDueUpdate: FC<PaymentDueUpdateProps> = ({ p, shop_id }) => {
       <TableCell>{format(p.payment_date, "dd/MM/yyyy")}</TableCell>
       <TableCell>{p.invoice_number}</TableCell>
       <TableCell>{p.company.name}</TableCell>
-      <TableCell>{p.total}</TableCell>
-      <TableCell>{p.due}</TableCell>
+      <TableCell>{rupees(p.total)}</TableCell>
+      <TableCell>{rupees(p.due)}</TableCell>
       <TableCell>
         <ComboBox
           fieldValue={collector_id}

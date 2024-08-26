@@ -58,7 +58,7 @@ export const companyRouter = createTRPCRouter({
             }
         })
 
-        return companies.map(c => ({
+        return companies.filter(c => c.payments.length > 0).map(c => ({
             id: c.id,
             name: c.name,
             total: c.payments.reduce((acc, p) => acc + p.total, 0)

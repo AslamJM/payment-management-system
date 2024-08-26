@@ -79,11 +79,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
   const updatePayment = api.payment.update.useMutation({
     onSuccess: (data) => {
       if (data.success) {
-        console.log(data.data);
-
         utils.payment.all.setData({ where: params }, (old) => {
-          console.log("hear");
-
           return old?.map((s) => (s.id === data.data?.id ? data.data : s));
         });
       }

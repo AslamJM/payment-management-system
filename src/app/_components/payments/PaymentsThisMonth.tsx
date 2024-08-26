@@ -1,6 +1,6 @@
 import { format } from "date-fns";
+import AlignTableHeader from "~/components/common/AlignTableHeader";
 import CardWrapper from "~/components/common/CardWrapper";
-import SimpleTableHeader from "~/components/common/SimpleTableHeader";
 import { Table, TableCell, TableRow } from "~/components/ui/table";
 import { rupees } from "~/lib/utils";
 import { api } from "~/trpc/server";
@@ -12,15 +12,24 @@ const PaymentsThisMonth = async () => {
       title="Payment Collection"
       description={format(new Date(), "MMMM,yyyy")}
     >
-      <Table>
-        <SimpleTableHeader heads={["Comapny", "Total"]} />
-        {payments.map((c) => (
-          <TableRow key={c.id}>
-            <TableCell>{c.name}</TableCell>
-            <TableCell align="right">{rupees(c.total)}</TableCell>
-          </TableRow>
-        ))}
-      </Table>
+      {payments.length === 0 && (
+        <div className="text-muted-foreground">
+          No payments for this month yet.
+        </div>
+      )}
+      {payments.length > 0 && (
+        <Table>
+          <AlignTableHeader
+            heads={[{ name: "Company" }, { name: "Total", align: "right" }]}
+          />
+          {payments.map((c) => (
+            <TableRow key={c.id}>
+              <TableCell>{c.name}</TableCell>
+              <TableCell align="right">{rupees(c.total)}</TableCell>
+            </TableRow>
+          ))}
+        </Table>
+      )}
     </CardWrapper>
   );
 };

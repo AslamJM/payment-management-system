@@ -1,11 +1,12 @@
-import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Checkbox } from "~/components/ui/checkbox";
 import { daysSince } from "~/lib/utils";
 
 import { type WholePayment } from "~/schemas/payment";
 import { DataTableColumnHeader } from "./ReportsTableHeader";
-import ShopSelect from "./filters/ShopSelect";
+import TextFilter from "./filters/TextFilter";
+import FilterComboBox from "~/app/_components/reports/FilterComboBox";
 
 export const reportColumns: ColumnDef<WholePayment>[] = [
   {
@@ -32,33 +33,52 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "payment_date",
-    header: (c) => <DataTableColumnHeader {...c} title="Payment Date" />,
+    header: (c) => (
+      <div className=" w-[120px] py-1">
+        <DataTableColumnHeader {...c} title="Invoice Date" />
+        <TextFilter column={c.column} name="date" />
+      </div>
+    ),
     cell: ({ cell }) => format(cell.getValue<Date>(), "dd/MM/yyyy"),
   },
   {
     accessorKey: "invoice_number",
-    header: "Invoice",
-  },
-  {
-    accessorKey: "shop",
-    accessorFn: (row) => row.shop.name,
-    header: ({ column }) => (
+    header: (c) => (
       <div className=" w-[120px] py-1">
-        <DataTableColumnHeader title="Shop" column={column} />
-        <ShopSelect column={column} />
+        <DataTableColumnHeader {...c} title="Invoice" />
+        <TextFilter column={c.column} name="invoice" />
       </div>
     ),
   },
   {
-    accessorKey: "company",
-    accessorFn: (row) => row.company.name,
-    header: "Company",
+    id: "shop",
+    accessorKey: "shop.name",
+    header: ({ column }) => (
+      <div className="  py-1">
+        <DataTableColumnHeader title="Shop" column={column} />
+        <FilterComboBox column={column} item="shop" />
+      </div>
+    ),
   },
   {
-    accessorKey: "shop",
-    accessorFn: (row) => row.shop.region.name,
+    id: "company",
+    accessorKey: "company.name",
+    header: ({ column }) => (
+      <div className="py-1">
+        <DataTableColumnHeader title="Company" column={column} />
+        <FilterComboBox column={column} item="company" />
+      </div>
+    ),
+  },
+  {
+    accessorKey: "shop.region.name",
     id: "area",
-    header: "Area",
+    header: ({ column }) => (
+      <div className="py-1">
+        <DataTableColumnHeader title="Area" column={column} />
+        <FilterComboBox column={column} item="area" />
+      </div>
+    ),
   },
   {
     accessorKey: "total",
@@ -67,6 +87,20 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "paid",
     header: "Paid",
+  },
+  {
+    accessorKey: "due",
+    header: "Due",
+  },
+  {
+    header: (c) => (
+      <div className=" w-[120px] py-1">
+        <DataTableColumnHeader {...c} title="Credit Period" />
+        <TextFilter column={c.column} name="period" />
+      </div>
+    ),
+    accessorKey: "due_date",
+    cell: ({ row }) => daysSince(row.original.due_date) + " days",
   },
   {
     accessorKey: "free",
@@ -84,10 +118,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     accessorKey: "market_return",
     header: "Market",
   },
-  {
-    accessorKey: "due",
-    header: "Due",
-  },
+
   {
     accessorKey: "payment_status",
     header: "Status",
@@ -96,11 +127,5 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     accessorKey: "collector",
     accessorFn: (row) => row.collector.name,
     header: "Collector",
-  },
-
-  {
-    header: "Credit Period",
-    accessorFn: (row) => row.payment_date,
-    cell: ({ row }) => daysSince(row.original.payment_date) + " days",
   },
 ];
