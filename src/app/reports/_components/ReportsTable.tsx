@@ -50,7 +50,7 @@ const ReportsTable: FC<ReportsTableProps> = ({ data }) => {
           columns={table.getAllColumns().filter((c) => c.getCanHide())}
         />
       </div>
-      <Table>
+      <Table className="w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

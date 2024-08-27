@@ -1,12 +1,15 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Checkbox } from "~/components/ui/checkbox";
-import { daysSince } from "~/lib/utils";
+import { cn, daysSince } from "~/lib/utils";
 
 import { type WholePayment } from "~/schemas/payment";
 import { DataTableColumnHeader } from "./ReportsTableHeader";
 import TextFilter from "./filters/TextFilter";
 import FilterComboBox from "~/app/_components/reports/FilterComboBox";
+import AmountCell from "./table/AmountCell";
+import { Badge } from "~/components/ui/badge";
+import { PaymentStatus } from "@prisma/client";
 
 export const reportColumns: ColumnDef<WholePayment>[] = [
   {
@@ -83,14 +86,20 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "total",
     header: "Total",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
   },
   {
     accessorKey: "paid",
     header: "Paid",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
   },
   {
     accessorKey: "due",
     header: "Due",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
   },
   {
     header: (c) => (
@@ -105,23 +114,38 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "free",
     header: "Free",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
   },
   {
     accessorKey: "discount",
     header: "Discount",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
   },
   {
     accessorKey: "saleable_return",
     header: "Saleable",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
   },
   {
     accessorKey: "market_return",
     header: "Market",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
   },
 
   {
     accessorKey: "payment_status",
     header: "Status",
+    cell: ({ getValue }) => (
+      <Badge
+        className={`${cn(getValue() === "PAID" ? "bg-green-500" : "bg-red-500")}`}
+      >
+        {getValue() as PaymentStatus}
+      </Badge>
+    ),
   },
   {
     accessorKey: "collector.name",
