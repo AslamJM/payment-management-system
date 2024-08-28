@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
-import { Edit, Pencil } from "lucide-react";
+import { BadgeIndianRupee, Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ComboBox from "~/components/common/ComboBox";
@@ -170,7 +170,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
           </DropdownMenuItem>
         ) : (
           <Button>
-            <Pencil className="mr-2 h-4 w-4" />
+            <BadgeIndianRupee className="mr-2 h-6 w-6" />
             Create Payment
           </Button>
         )}

@@ -1,10 +1,12 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Checkbox } from "~/components/ui/checkbox";
-import { daysSince, rupees } from "~/lib/utils";
+import { daysSince } from "~/lib/utils";
 
 import { type WholePayment } from "~/schemas/payment";
 import ColumnMenu from "./ColumnMenu";
+import AmountCell from "~/app/reports/_components/table/AmountCell";
+import AmounFooter from "~/app/reports/_components/table/AmounFooter";
 
 export const paymentColumns: ColumnDef<WholePayment>[] = [
   {
@@ -56,39 +58,61 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "total",
+    id: "total",
     header: "Total",
-    accessorFn: (row) => rupees(row.total),
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="total" />,
   },
   {
     accessorKey: "paid",
     header: "Paid",
-    accessorFn: (row) => rupees(row.paid),
-  },
-  {
-    accessorKey: "free",
-    header: "Free",
-    accessorFn: (row) => rupees(row.free),
-  },
-  {
-    accessorKey: "discount",
-    header: "Discount",
-    accessorFn: (row) => rupees(row.discount),
-  },
-  {
-    accessorKey: "saleable_return",
-    header: "Saleable",
-    accessorFn: (row) => rupees(row.saleable_return),
-  },
-  {
-    accessorKey: "market_return",
-    header: "Market",
-    accessorFn: (row) => rupees(row.market_return),
+    id: "paid",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="paid" />,
   },
   {
     accessorKey: "due",
     header: "Due",
-    accessorFn: (row) => rupees(row.due),
+    id: "due",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="due" />,
   },
+  {
+    accessorKey: "free",
+    header: "Free",
+    id: "free",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="free" />,
+  },
+  {
+    accessorKey: "discount",
+    header: "Discount",
+    id: "discount",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="discount" />,
+  },
+  {
+    accessorKey: "saleable_return",
+    header: "Saleable",
+    id: "saleable",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="saleable" />,
+  },
+  {
+    accessorKey: "market_return",
+    header: "Market",
+    id: "market",
+    size: 100,
+    cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="market" />,
+  },
+
   {
     accessorKey: "payment_status",
     header: "Status",

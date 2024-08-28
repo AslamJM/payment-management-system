@@ -19,7 +19,11 @@ import { useState, type FC } from "react";
 import { type WholePayment } from "~/schemas/payment";
 import { reportColumns } from "./columns";
 import VisibilityCheck from "./filters/VisibilityCheck";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { usePdf } from "~/hooks/usePdf";
+import { Button } from "~/components/ui/button";
+import { PrinterIcon, TableIcon } from "lucide-react";
+import { useXlsx } from "~/hooks/useXlsx";
+import { DataTablePagination } from "~/components/common/DataTablePagination";
 
 interface ReportsTableProps {
   data: WholePayment[];
@@ -45,12 +49,30 @@ const ReportsTable: FC<ReportsTableProps> = ({ data }) => {
       columnFilters,
     },
   });
+
+  const { modelData } = usePdf(table);
+  const { dowloadXlsx } = useXlsx(table);
+
+  const selectedLength = table.getSelectedRowModel().rows.length;
+
   return (
     <div className="space-y-2">
-      <div>
-        <VisibilityCheck
-          columns={table.getAllColumns().filter((c) => c.getCanHide())}
-        />
+      <div className="flex items-center gap-4 py-2">
+        <div>
+          <VisibilityCheck
+            columns={table.getAllColumns().filter((c) => c.getCanHide())}
+          />
+        </div>
+        <div>
+          <Button onClick={modelData} disabled={selectedLength === 0}>
+            <PrinterIcon className="mr-2" /> Download PDF
+          </Button>
+        </div>
+        <div>
+          <Button onClick={dowloadXlsx} disabled={selectedLength === 0}>
+            <TableIcon className="mr-2" /> Download XLSX
+          </Button>
+        </div>
       </div>
 
       <div className="max-w-full overflow-x-auto">
@@ -106,6 +128,9 @@ const ReportsTable: FC<ReportsTableProps> = ({ data }) => {
             ))}
           </TableFooter>
         </Table>
+      </div>
+      <div className="md:w-[550px]">
+        <DataTablePagination table={table} />
       </div>
     </div>
   );

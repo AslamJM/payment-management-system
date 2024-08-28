@@ -33,7 +33,7 @@ const InvoiceSearch = () => {
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <Search className="m-4 mr-2 h-4 w-4" />
+              <Search className="mr-2 h-4 w-4" />
             )}{" "}
             Search
           </Button>

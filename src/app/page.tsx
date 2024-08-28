@@ -1,16 +1,15 @@
-import CreatePaymentForm from "./_components/payments/CreatePaymentForm";
-import PaymentsThisMonth from "./_components/payments/PaymentsThisMonth";
 import SearchShop from "./_components/payments/SearchShop";
+import DuePaymentsThisMonth from "./_components/payments/DuePaymentsThisMonth";
+import AreaChart from "~/components/dashboard/AreaChart";
 
 export default async function Home() {
   return (
     <main className="space-y-4">
-      <CreatePaymentForm payment={null} />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <DuePaymentsThisMonth />
         <div>
-          <PaymentsThisMonth />
+          <AreaChart />
         </div>
-        <div className=""></div>
       </div>
       <SearchShop />
     </main>

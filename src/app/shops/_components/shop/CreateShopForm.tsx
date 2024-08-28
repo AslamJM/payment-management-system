@@ -120,7 +120,7 @@ const CreateShopForm = ({ shop }: Props) => {
           </TooltipIconButton>
         ) : (
           <Button>
-            <Pencil />
+            <Pencil className="mr-2 h-6 w-6" />
             Create Shop
           </Button>
         )}

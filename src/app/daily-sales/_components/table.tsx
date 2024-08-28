@@ -9,6 +9,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -20,6 +21,7 @@ import { type WholePayment } from "~/schemas/payment";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useQueryParams } from "~/hooks/useQueryParams";
+import { DataTablePagination } from "~/components/common/DataTablePagination";
 
 type TableProps = {
   payments: WholePayment[];
@@ -126,7 +128,26 @@ export default function PaymentTable({ payments, loading }: TableProps) {
             </TableRow>
           )}
         </TableBody>
+        <TableFooter>
+          {table.getFooterGroups().map((fg) => (
+            <TableRow key={fg.id}>
+              {fg.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.footer,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableFooter>
       </Table>
+      <DataTablePagination table={table} />
     </div>
   );
 }

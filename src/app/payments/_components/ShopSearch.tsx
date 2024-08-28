@@ -85,7 +85,7 @@ const ShopSearch = () => {
             </PopoverContent>
           </Popover>
           <Button onClick={() => setEnabled(true)}>
-            <Search className="m-4 mr-2 h-4" />
+            <Search className=" mr-2 h-4 w-4" />
             Search
           </Button>
         </div>

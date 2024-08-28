@@ -6,11 +6,11 @@ import { usePayments } from "~/hooks/usePayments";
 import TableFilters from "./TableFilters";
 
 const TableWrapper = () => {
-  const { payments, loading, getvalue, setValue } = usePayments();
+  const { payments, loading } = usePayments();
   return (
     <div className="space-y-6">
       <CardWrapper title="Payment Filters">
-        <TableFilters getvalue={getvalue} setValue={setValue} />
+        <TableFilters />
       </CardWrapper>
       <CardWrapper title="Payments">
         <PaymentTable payments={payments ?? []} loading={loading} />

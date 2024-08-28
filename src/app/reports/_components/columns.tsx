@@ -9,7 +9,7 @@ import TextFilter from "./filters/TextFilter";
 import FilterComboBox from "~/app/_components/reports/FilterComboBox";
 import AmountCell from "./table/AmountCell";
 import { Badge } from "~/components/ui/badge";
-import { PaymentStatus } from "@prisma/client";
+import { type PaymentStatus } from "@prisma/client";
 import AmounFooter from "./table/AmounFooter";
 import StatusSelect from "./filters/ShopSelect";
 
@@ -38,6 +38,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "payment_date",
+    id: "Invoice Date",
     accessorFn: (row) => format(row.payment_date, "dd/MM/yyyy"),
     header: (c) => (
       <div className="w-[100px] space-y-1 py-1">
@@ -48,6 +49,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "invoice_number",
+    id: "Invoice",
     header: (c) => (
       <div className="w-[100px] space-y-1 py-1">
         <DataTableColumnHeader {...c} title="Invoice" />
@@ -56,7 +58,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     ),
   },
   {
-    id: "shop",
+    id: "Shop",
     accessorKey: "shop.name",
     header: ({ column }) => (
       <div className="space-y-1  py-1">
@@ -66,7 +68,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     ),
   },
   {
-    id: "company",
+    id: "Company",
     accessorKey: "company.name",
     header: ({ column }) => (
       <div className="space-y-1 py-1">
@@ -77,7 +79,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "shop.region.name",
-    id: "area",
+    id: "Area",
     header: ({ column }) => (
       <div className="space-y-1 py-1">
         <DataTableColumnHeader title="Area" column={column} />
@@ -87,6 +89,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "total",
+    id: "total",
     header: "Total",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
@@ -95,6 +98,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "paid",
     header: "Paid",
+    id: "paid",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
     footer: ({ table }) => <AmounFooter table={table} colId="paid" />,
@@ -102,6 +106,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "due",
     header: "Due",
+    id: "due",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
     footer: ({ table }) => <AmounFooter table={table} colId="due" />,
@@ -114,11 +119,13 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
       </div>
     ),
     accessorKey: "due_date",
+    id: "Due Date",
     accessorFn: (row) => daysSince(row.due_date) + " days",
   },
   {
     accessorKey: "free",
     header: "Free",
+    id: "free",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
     footer: ({ table }) => <AmounFooter table={table} colId="free" />,
@@ -126,6 +133,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "discount",
     header: "Discount",
+    id: "discount",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
     footer: ({ table }) => <AmounFooter table={table} colId="discount" />,
@@ -133,22 +141,23 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "saleable_return",
     header: "Saleable",
+    id: "saleable",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
-    footer: ({ table }) => (
-      <AmounFooter table={table} colId="saleable_return" />
-    ),
+    footer: ({ table }) => <AmounFooter table={table} colId="saleable" />,
   },
   {
     accessorKey: "market_return",
     header: "Market",
+    id: "market",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
-    footer: ({ table }) => <AmounFooter table={table} colId="market_return" />,
+    footer: ({ table }) => <AmounFooter table={table} colId="market" />,
   },
 
   {
     accessorKey: "payment_status",
+    id: "Status",
     header: ({ column }) => (
       <div className="space-y-1  py-1">
         <DataTableColumnHeader title="Status" column={column} />
@@ -165,6 +174,7 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
   },
   {
     accessorKey: "collector.name",
+    id: "Collector",
     header: ({ column }) => (
       <div className="space-y-1  py-1">
         <DataTableColumnHeader title="Collector" column={column} />

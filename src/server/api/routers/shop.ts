@@ -1,3 +1,5 @@
+import { endOfMonth, startOfMonth } from "date-fns"
+import _ from "underscore"
 import { z } from "zod"
 import { handlerError } from "~/lib/handleError"
 import { createShopSchema, updateShopSchema } from "~/schemas/shop"
@@ -60,10 +62,34 @@ export const shopRouter = createTRPCRouter({
         return shop?.payments
     }),
 
-    duePaymentsForMonth: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
-        const month = input
+    duePaymentsForMonth: protectedProcedure.query(async ({ ctx }) => {
         const paymnents = await ctx.db.payment.findMany({
+            where: {
+                payment_date: {
+                    gte: startOfMonth(new Date()),
+                    lte: endOfMonth(new Date())
+                },
+                verified: true,
+                status: true,
+                due: {
+                    gt: 0
+                }
+            },
 
+            select: {
+                id: true,
+                shop: {
+                    select: {
+                        name: true,
+                        id: true
+                    }
+                },
+                due: true,
+                due_date: true
+            }
         })
+
+        return paymnents
+
     })
 })
