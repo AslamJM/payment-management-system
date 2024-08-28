@@ -6,7 +6,11 @@ interface AmountCellProps {
 }
 
 const AmountCell: FC<AmountCellProps> = ({ amount }) => {
-  return <div className="text-sm text-muted-foreground">{rupees(amount)}</div>;
+  return (
+    <div className="text-right text-sm text-muted-foreground">
+      {rupees(amount)}
+    </div>
+  );
 };
 
 export default AmountCell;

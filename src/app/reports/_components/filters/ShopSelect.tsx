@@ -1,5 +1,5 @@
 import { type Column } from "@tanstack/react-table";
-import { useMemo, type FC } from "react";
+import { type FC } from "react";
 import { type WholePayment } from "~/schemas/payment";
 import {
   Select,
@@ -7,27 +7,26 @@ import {
   SelectItem,
   SelectTrigger,
 } from "~/components/ui/select";
-import { api } from "~/trpc/react";
 
-interface ShopSelectProps {
+interface StatusSelectProps {
   column: Column<WholePayment>;
 }
 
-const ShopSelect: FC<ShopSelectProps> = ({ column }) => {
-  const { data } = api.shops.all.useQuery();
-  const shopNames = useMemo(() => {
-    if (data) {
-      return data.map((d) => d.name);
-    }
-    return [];
-  }, [data]);
+const StatusSelect: FC<StatusSelectProps> = ({ column }) => {
+  const status = ["PAID", "DUE", "CANCELLED"];
+
   return (
-    <Select onValueChange={(v) => column.setFilterValue(v)}>
-      <SelectTrigger>Filter Shops</SelectTrigger>
+    <Select
+      onValueChange={(v) => {
+        v === "all" ? column.setFilterValue("") : column.setFilterValue(v);
+      }}
+    >
+      <SelectTrigger>Status</SelectTrigger>
       <SelectContent>
-        {shopNames.map((sn) => (
+        <SelectItem value="all">All</SelectItem>
+        {status.map((sn) => (
           <SelectItem key={sn} value={sn}>
-            {sn}
+            {sn.toLowerCase()}
           </SelectItem>
         ))}
       </SelectContent>
@@ -35,4 +34,4 @@ const ShopSelect: FC<ShopSelectProps> = ({ column }) => {
   );
 };
 
-export default ShopSelect;
+export default StatusSelect;

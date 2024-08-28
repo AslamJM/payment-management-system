@@ -30,20 +30,26 @@ const FilterComboBox: FC<FilterComboBoxProps> = ({ column, item }) => {
 
   const { collectorValues, shopValues, regionValues, companyValues } =
     useValues();
-  let values;
+  let values = [
+    {
+      id: 0,
+      value: "",
+      label: "all",
+    },
+  ];
 
   switch (item) {
     case "area":
-      values = regionValues;
+      values = [...values, ...regionValues];
       break;
     case "collector":
-      values = collectorValues;
+      values = [...values, ...collectorValues];
       break;
     case "company":
-      values = companyValues;
+      values = [...values, ...companyValues];
       break;
     case "shop":
-      values = shopValues;
+      values = [...values, ...shopValues];
       break;
   }
 

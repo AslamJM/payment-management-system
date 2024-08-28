@@ -10,6 +10,8 @@ import FilterComboBox from "~/app/_components/reports/FilterComboBox";
 import AmountCell from "./table/AmountCell";
 import { Badge } from "~/components/ui/badge";
 import { PaymentStatus } from "@prisma/client";
+import AmounFooter from "./table/AmounFooter";
+import StatusSelect from "./filters/ShopSelect";
 
 export const reportColumns: ColumnDef<WholePayment>[] = [
   {
@@ -88,18 +90,21 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     header: "Total",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="total" />,
   },
   {
     accessorKey: "paid",
     header: "Paid",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="paid" />,
   },
   {
     accessorKey: "due",
     header: "Due",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="due" />,
   },
   {
     header: (c) => (
@@ -116,29 +121,40 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
     header: "Free",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="free" />,
   },
   {
     accessorKey: "discount",
     header: "Discount",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="discount" />,
   },
   {
     accessorKey: "saleable_return",
     header: "Saleable",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => (
+      <AmounFooter table={table} colId="saleable_return" />
+    ),
   },
   {
     accessorKey: "market_return",
     header: "Market",
     size: 100,
     cell: (r) => <AmountCell amount={r.getValue() as number} />,
+    footer: ({ table }) => <AmounFooter table={table} colId="market_return" />,
   },
 
   {
     accessorKey: "payment_status",
-    header: "Status",
+    header: ({ column }) => (
+      <div className="space-y-1  py-1">
+        <DataTableColumnHeader title="Status" column={column} />
+        <StatusSelect column={column} />
+      </div>
+    ),
     cell: ({ getValue }) => (
       <Badge
         className={`${cn(getValue() === "PAID" ? "bg-green-500" : "bg-red-500")}`}
