@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { api } from "~/trpc/server";
 import { Table } from "../ui/table";
 import SimpleTableHeader from "../common/SimpleTableHeader";
-import UserRow from "~/app/users/_components/UserRow";
+import UserRow from "~/app/(main)/users/_components/UserRow";
 
 export default async function UserList() {
   const users = await api.users.getAll();

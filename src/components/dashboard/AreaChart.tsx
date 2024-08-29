@@ -21,6 +21,7 @@ import {
 import { format } from "date-fns";
 import { api } from "~/trpc/react";
 import { rupees } from "~/lib/utils";
+import Loader from "../common/Loader";
 
 const colors = [
   "var(--color-chrome)",
@@ -57,7 +58,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function AreaChart() {
-  const { data } = api.regions.paymentsPieChart.useQuery();
+  const { data, isLoading } = api.regions.paymentsPieChart.useQuery();
 
   const totalVisitors = React.useMemo(() => {
     if (!data) return 0;
@@ -77,6 +78,7 @@ export default function AreaChart() {
           <CardDescription>{format(new Date(), "MMMM, yyyy")}</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">
+          {isLoading && <Loader />}
           {data.length === 0 && (
             <div className="leading-none text-muted-foreground">
               No collections so far for this month.

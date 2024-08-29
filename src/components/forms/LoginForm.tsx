@@ -49,7 +49,7 @@ export default function LoginForm() {
         password,
         redirect: false,
       });
-      console.log({ response });
+
       if (!response?.error) {
         router.push("/");
       }
@@ -57,11 +57,12 @@ export default function LoginForm() {
       if (!response!.ok) {
         throw new Error("Network response was not ok");
       }
-      // Process response here
-      console.log("Login Successful", response);
       toast({ title: "Login Successful" });
     } catch (error) {
-      toast({ title: "Login Failed", description: "" });
+      toast({
+        title: "Login Failed",
+        description: "Username or Password is incorrect",
+      });
     }
   };
 
