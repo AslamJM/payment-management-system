@@ -1,6 +1,6 @@
-import SearchShop from "./_components/payments/SearchShop";
 import DuePaymentsThisMonth from "./_components/payments/DuePaymentsThisMonth";
 import AreaChart from "~/components/dashboard/AreaChart";
+import CompanyLineChart from "~/components/dashboard/CompanyLineChart";
 
 export default async function Home() {
   return (
@@ -11,7 +11,9 @@ export default async function Home() {
           <AreaChart />
         </div>
       </div>
-      <SearchShop />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <CompanyLineChart />
+      </div>
     </main>
   );
 }

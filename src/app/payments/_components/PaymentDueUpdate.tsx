@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { Check } from "lucide-react";
 import { useState, type FC } from "react";
 import ComboBox from "~/components/common/ComboBox";
 import DatePickerWithLabel from "~/components/common/DatePickerWithLabel";
@@ -34,6 +35,8 @@ const PaymentDueUpdate: FC<PaymentDueUpdateProps> = ({ p, shop_id }) => {
         setAmount("");
         if (shop_id) {
           await utils.payment.duePaymentsShop.invalidate(shop_id);
+        } else {
+          await utils.payment.searchInvoice.invalidate(p.invoice_number);
         }
       }
     },
@@ -87,25 +90,32 @@ const PaymentDueUpdate: FC<PaymentDueUpdateProps> = ({ p, shop_id }) => {
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center gap-2 px-2">
-          <div className="flex items-center gap-2">
-            <Checkbox
-              onCheckedChange={(e) => {
-                if (e) {
-                  setAmount(p.due.toString());
-                }
-              }}
-            />{" "}
-            <Label>Full</Label>
+        {p.due === 0 ? (
+          <div className="flex flex-col items-center">
+            <Check className="h-4 w-4 text-green-500" />
+            <span className="text-sm text-muted-foreground">Fully paid</span>
           </div>
-          <Button
-            size="sm"
-            disabled={!collector_id || !date || !amount || isPending}
-            onClick={updatePayment}
-          >
-            Update
-          </Button>
-        </div>
+        ) : (
+          <div className="flex items-center gap-2 px-2">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                onCheckedChange={(e) => {
+                  if (e) {
+                    setAmount(p.due.toString());
+                  }
+                }}
+              />{" "}
+              <Label>Full</Label>
+            </div>
+            <Button
+              size="sm"
+              disabled={!collector_id || !date || !amount || isPending}
+              onClick={updatePayment}
+            >
+              Update
+            </Button>
+          </div>
+        )}
       </TableCell>
     </TableRow>
   );

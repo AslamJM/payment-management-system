@@ -1,10 +1,11 @@
 'use client'
 
 import { api } from "~/trpc/react"
-import { Key, useQueryParams } from "./useQueryParams"
+import { type Key, useQueryParams } from "./useQueryParams"
 
 export const usePayments = () => {
 
+    const utils = api.useUtils()
     const where = useQueryParams(state => state.where)
     const addParams = useQueryParams(state => state.addParam)
     const { data, isLoading, refetch } = api.payment.all.useQuery({
@@ -21,11 +22,18 @@ export const usePayments = () => {
         addParams(key, value)
     }
 
+    const deleteData = (id: number) => {
+        utils.payment.all.setData({ where }, (old) => {
+            return old?.filter(p => p.id !== id)
+        })
+    }
+
     return {
         payments: data,
         loading: isLoading,
         setValue,
         getvalue,
+        deleteData
 
     }
 }

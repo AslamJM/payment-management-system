@@ -10,6 +10,7 @@ import { Table, TableBody } from "~/components/ui/table";
 import { api } from "~/trpc/react";
 import PaymentDueUpdate from "./PaymentDueUpdate";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollBar } from "~/components/ui/scroll-area";
 
 const InvoiceSearch = () => {
   const [invoice, setInvoice] = useState("");
@@ -38,7 +39,9 @@ const InvoiceSearch = () => {
             Search
           </Button>
         </div>
-        {data === null && <p className="text-muted">No invoice found.</p>}
+        {!isLoading && !data && (
+          <p className="text-muted-foreground">No invoice found.</p>
+        )}
         {data && (
           <ScrollArea className="w-full whitespace-nowrap rounded-md border">
             <Table>
@@ -59,6 +62,7 @@ const InvoiceSearch = () => {
                 <PaymentDueUpdate p={data} />
               </TableBody>
             </Table>
+            <ScrollBar orientation="horizontal" />
           </ScrollArea>
         )}
       </div>

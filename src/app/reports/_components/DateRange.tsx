@@ -24,12 +24,12 @@ const DateRange: FC<DateRangeProps> = ({
   loading,
 }) => {
   return (
-    <div className="flex items-end  gap-4">
-      <div className="w-[250px]">
+    <div className="flex flex-col items-end gap-4 md:flex-row">
+      <div className="w-full md:w-[250px]">
         <Label>From</Label>
         <DatePickerWithLabel date={from ?? null} setDate={setFrom} />
       </div>
-      <div className="w-[250px]">
+      <div className="w-full md:w-[250px]">
         <Label>To</Label>
         <DatePickerWithLabel date={to ?? null} setDate={setTo} />
       </div>

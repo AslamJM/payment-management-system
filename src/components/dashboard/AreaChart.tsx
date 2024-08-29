@@ -20,13 +20,7 @@ import {
 } from "~/components/ui/chart";
 import { format } from "date-fns";
 import { api } from "~/trpc/react";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-];
+import { rupees } from "~/lib/utils";
 
 const colors = [
   "var(--color-chrome)",
@@ -67,77 +61,84 @@ export default function AreaChart() {
 
   const totalVisitors = React.useMemo(() => {
     if (!data) return 0;
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+    return data.reduce((a, d) => a + d.total, 0);
+  }, [data]);
 
   if (data) {
     const cData = data.map((d, i) => ({
       area: d.region,
       total: d.total,
-      fill: colors[i],
+      fill: colors[i % colors.length],
     }));
     return (
-      <Card className="flex flex-col">
-        <CardHeader className="items-center pb-0">
+      <Card>
+        <CardHeader>
           <CardTitle>Areawise Payment Collection</CardTitle>
-          <CardDescription>{format(new Date(), "MMM, yyyy")}</CardDescription>
+          <CardDescription>{format(new Date(), "MMMM, yyyy")}</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto aspect-square max-h-[250px]"
-          >
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Pie
-                data={cData}
-                dataKey="total"
-                nameKey="area"
-                innerRadius={60}
-                strokeWidth={5}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          <tspan
+          {data.length === 0 && (
+            <div className="leading-none text-muted-foreground">
+              No collections so far for this month.
+            </div>
+          )}
+          {data.length > 0 && (
+            <ChartContainer
+              config={chartConfig}
+              className="mx-auto aspect-square max-h-[250px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={cData}
+                  dataKey="total"
+                  nameKey="area"
+                  innerRadius={60}
+                  strokeWidth={5}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            textAnchor="middle"
+                            dominantBaseline="middle"
                           >
-                            {totalVisitors.toLocaleString()}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy ?? 0) + 24}
-                            className="fill-muted-foreground"
-                          >
-                            Visitors
-                          </tspan>
-                        </text>
-                      );
-                    }
-                  }}
-                />
-              </Pie>
-            </PieChart>
-          </ChartContainer>
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-xl font-bold"
+                            >
+                              {rupees(totalVisitors)}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy ?? 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              Total collection
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          )}
         </CardContent>
         <CardFooter className="flex-col gap-2 text-sm">
-          <div className="flex items-center gap-2 font-medium leading-none">
+          {/* <div className="flex items-center gap-2 font-medium leading-none">
             Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-          </div>
+          </div> */}
           <div className="leading-none text-muted-foreground">
-            Showing total visitors for the last 6 months
+            Showing area wise collection of {format(new Date(), "MMMM, yyyy")}
           </div>
         </CardFooter>
       </Card>

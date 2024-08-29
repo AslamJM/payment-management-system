@@ -1,16 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
-import { BadgeIndianRupee, Edit } from "lucide-react";
-import { useEffect, useState } from "react";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ComboBox from "~/components/common/ComboBox";
 import DatePickerWithLabel from "~/components/common/DatePickerWithLabel";
 import { Button } from "~/components/ui/button";
 
 import { Dialog, DialogContent, DialogHeader } from "~/components/ui/dialog";
-import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -43,12 +41,11 @@ import { api } from "~/trpc/react";
 
 type Props = {
   payment: WholePayment | null;
-  close?: () => void;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const CreatePaymentForm = ({ payment }: Props) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
+const CreatePaymentForm = ({ payment, open, setOpen }: Props) => {
   const { shopValues, companyValues, collectorValues } = useValues();
 
   const form = useForm<CreatePaymentInput>({
@@ -69,7 +66,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
           }
         });
         form.reset();
-        setDialogOpen(false);
+        setOpen(false);
       } else {
         //if (data) form.setError("name", { message: data.message });
       }
@@ -83,9 +80,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
           return old?.map((s) => (s.id === data.data?.id ? data.data : s));
         });
       }
-
-      setDialogOpen(false);
-      if (close) close();
+      setOpen(false);
     },
   });
 
@@ -162,19 +157,7 @@ const CreatePaymentForm = ({ payment }: Props) => {
   }, [total, paid, form]);
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        {payment ? (
-          <DropdownMenuItem>
-            <Edit className="mr-2 h-4 w-4 text-orange-500" /> Edit
-          </DropdownMenuItem>
-        ) : (
-          <Button>
-            <BadgeIndianRupee className="mr-2 h-6 w-6" />
-            Create Payment
-          </Button>
-        )}
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-[800px]">
         <DialogHeader>
           <DialogTitle>{payment ? "Edit" : "Create"} Payment</DialogTitle>

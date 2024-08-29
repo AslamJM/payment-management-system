@@ -24,6 +24,7 @@ import { Button } from "~/components/ui/button";
 import { PrinterIcon, TableIcon } from "lucide-react";
 import { useXlsx } from "~/hooks/useXlsx";
 import { DataTablePagination } from "~/components/common/DataTablePagination";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 
 interface ReportsTableProps {
   data: WholePayment[];
@@ -129,6 +130,7 @@ const ReportsTable: FC<ReportsTableProps> = ({ data }) => {
           </TableFooter>
         </Table>
       </div>
+
       <div className="md:w-[550px]">
         <DataTablePagination table={table} />
       </div>

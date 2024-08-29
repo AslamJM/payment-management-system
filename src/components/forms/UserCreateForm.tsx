@@ -15,10 +15,19 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { api } from "~/trpc/react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  email: z.string().email("invalid email").min(1, "Email is required"),
+  username: z.string().min(1, "Username is required"),
   password: z
     .string()
     .min(6, "Password should atleast have 6 characters")
@@ -30,7 +39,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const defaultValues: FormData = {
   name: "",
-  email: "",
+  username: "",
   password: "",
   role: "EMPLOYEE",
 };
@@ -41,8 +50,19 @@ const UserCreateForm = () => {
     defaultValues,
   });
 
+  const utils = api.useUtils();
+
+  const { mutate, isPending } = api.users.create.useMutation({
+    onSuccess: async (data) => {
+      if (data.success) {
+        await utils.users.getAll.invalidate();
+        form.reset();
+      }
+    },
+  });
+
   const onSubmit = (values: FormData) => {
-    console.log(values);
+    mutate(values);
   };
 
   return (
@@ -68,12 +88,12 @@ const UserCreateForm = () => {
             />
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" {...field} type="text" />
+                    <Input placeholder="Username" {...field} type="text" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,14 +106,36 @@ const UserCreateForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Password" {...field} type="password" />
+                    <Input placeholder="Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Creating..." : "Create User"}
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Role" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="EMPLOYEE">Employee</SelectItem>
+                      <SelectItem value="ADMIN">Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 animate-spin" />}
+              {isPending ? "Creating..." : "Create User"}
             </Button>
           </form>
         </Form>

@@ -1,8 +1,8 @@
 import React from "react";
 import PaymentsThisMonth from "../_components/payments/PaymentsThisMonth";
-import CreatePaymentForm from "../_components/payments/CreatePaymentForm";
 import InvoiceSearch from "./_components/InvoiceSearch";
 import ShopSearch from "./_components/ShopSearch";
+import PaymentCreate from "./_components/PaymentCreate";
 
 const PaymentsPage = () => {
   return (
@@ -11,7 +11,7 @@ const PaymentsPage = () => {
         <PaymentsThisMonth />
       </div>
       <div className="col-span-2 space-y-4">
-        <CreatePaymentForm payment={null} />
+        <PaymentCreate />
         <InvoiceSearch />
         <ShopSearch />
       </div>

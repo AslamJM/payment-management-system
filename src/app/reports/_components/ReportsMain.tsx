@@ -5,6 +5,7 @@ import DateRange from "./DateRange";
 import { api } from "~/trpc/react";
 import ReportsTable from "./ReportsTable";
 import CardWrapper from "~/components/common/CardWrapper";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 
 const ReportsMain = () => {
   const [from, setFrom] = useState<Date | undefined>(undefined);

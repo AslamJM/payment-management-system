@@ -65,7 +65,7 @@ export const shopRouter = createTRPCRouter({
     duePaymentsForMonth: protectedProcedure.query(async ({ ctx }) => {
         const paymnents = await ctx.db.payment.findMany({
             where: {
-                payment_date: {
+                due_date: {
                     gte: startOfMonth(new Date()),
                     lte: endOfMonth(new Date())
                 },

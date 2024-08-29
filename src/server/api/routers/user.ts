@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { handlerError } from "~/lib/handleError";
 import {
     createTRPCRouter,
     protectedProcedure,
@@ -15,10 +16,13 @@ const loginSchema = z.object({
 export const userRouter = createTRPCRouter({
     create: protectedProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
         try {
-            const user = await ctx.db.user.create({ data: input })
-            return user
+            await ctx.db.user.create({ data: input })
+            return {
+                success: true,
+                message: "user created successfully"
+            }
         } catch (error) {
-            return null
+            return handlerError(error)
         }
     }),
     getAll: protectedProcedure.query(async ({ ctx }) => {

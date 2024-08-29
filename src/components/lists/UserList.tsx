@@ -1,9 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { api } from "~/trpc/server";
+import { Table } from "../ui/table";
+import SimpleTableHeader from "../common/SimpleTableHeader";
+import UserRow from "~/app/users/_components/UserRow";
 
 export default async function UserList() {
   const users = await api.users.getAll();
-  console.log(users);
 
   return (
     <Card>
@@ -11,9 +13,12 @@ export default async function UserList() {
         <CardTitle>List of users</CardTitle>
       </CardHeader>
       <CardContent>
-        {users.map((user) => (
-          <div key={user.id}>{user.email}</div>
-        ))}
+        <Table>
+          <SimpleTableHeader heads={["username", "name", "role", "actions"]} />
+          {users.map((u) => (
+            <UserRow key={u.id} user={u} />
+          ))}
+        </Table>
       </CardContent>
     </Card>
   );

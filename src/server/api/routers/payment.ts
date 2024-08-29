@@ -144,5 +144,20 @@ export const paymentRouter = createTRPCRouter({
             }
         })
         return payment
+    }),
+
+    deletePayment: protectedProcedure.input(z.number()).mutation(async ({ ctx, input }) => {
+        try {
+            await ctx.db.payment.update({ where: { id: input }, data: { status: false } })
+            return {
+                sucess: true,
+                message: "payment deleted successfully"
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: "failed to delete"
+            }
+        }
     })
 })

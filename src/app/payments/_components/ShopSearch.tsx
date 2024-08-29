@@ -96,27 +96,35 @@ const ShopSearch = () => {
               <span className="text-sm text-muted">Searching...</span>
             </div>
           )}
-          {data && (
-            <Table>
-              <SimpleTableHeader
-                heads={[
-                  "Invoice Date",
-                  "Invoice",
-                  "Company",
-                  "Total",
-                  "Due",
-                  "Collector",
-                  "Date",
-                  "Amount",
-                  "Action",
-                ]}
-              />
-              <TableBody>
-                {data.map((p) => (
-                  <PaymentDueUpdate key={p.id} p={p} shop_id={value!} />
-                ))}
-              </TableBody>
-            </Table>
+          {data ? (
+            data.length > 0 ? (
+              <Table>
+                <SimpleTableHeader
+                  heads={[
+                    "Invoice Date",
+                    "Invoice",
+                    "Company",
+                    "Total",
+                    "Due",
+                    "Collector",
+                    "Date",
+                    "Amount",
+                    "Action",
+                  ]}
+                />
+                <TableBody>
+                  {data.map((p) => (
+                    <PaymentDueUpdate key={p.id} p={p} shop_id={value!} />
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <div className="text-muted-foreground">
+                No due payments for this shop.
+              </div>
+            )
+          ) : (
+            <></>
           )}
         </div>
       </div>
