@@ -12,6 +12,7 @@ import { Badge } from "~/components/ui/badge";
 import { type PaymentStatus } from "@prisma/client";
 import AmounFooter from "./table/AmounFooter";
 import StatusSelect from "./filters/ShopSelect";
+import InvoiceColumn from "./table/InvoiceColumn";
 
 export const reportColumns: ColumnDef<WholePayment>[] = [
   {
@@ -55,6 +56,13 @@ export const reportColumns: ColumnDef<WholePayment>[] = [
         <DataTableColumnHeader {...c} title="Invoice" />
         <TextFilter column={c.column} name="invoice" />
       </div>
+    ),
+    cell: (c) => (
+      <InvoiceColumn
+        invoice={c.getValue() as string}
+        paymentId={c.row.original.id}
+        amount={c.row.original.total}
+      />
     ),
   },
   {

@@ -64,6 +64,18 @@ export const createPaymentHistorySchema = z.object({
     collector_id: z.number()
 })
 
+export const updatePaymentHistorySchema = z.object({
+    amount: z.number(),
+    date: z.date(),
+    collector_id: z.number()
+})
+
+export const updateHistoryInputSchema = z.object({
+    id: z.number(),
+    paymentId: z.number(),
+    update: updatePaymentHistorySchema.partial()
+})
+
 const paymentQueryWhere = z.object({
     collector_id: z.number(),
     shop_id: z.number(),

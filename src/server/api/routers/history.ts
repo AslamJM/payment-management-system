@@ -1,3 +1,4 @@
+import { z } from "zod"
 import { createPaymentHistorySchema } from "~/schemas/payment"
 import {
     createTRPCRouter,
@@ -39,6 +40,15 @@ export const historyRouter = createTRPCRouter({
                 message: "create failed"
             }
         }
+    }),
+
+    getAllForPayment: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
+        const histories = await ctx.db.paymentHistory.findMany({
+            where: { payment_id: input }, include: {
+                collector: true
+            }
+        })
+        return histories
     })
 
 })
