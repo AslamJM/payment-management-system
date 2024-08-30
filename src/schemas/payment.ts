@@ -76,6 +76,11 @@ export const updateHistoryInputSchema = z.object({
     update: updatePaymentHistorySchema.partial()
 })
 
+export const deletePaymentHistorySchema = z.object({
+    id: z.number(),
+    payment_id: z.number()
+})
+
 const paymentQueryWhere = z.object({
     collector_id: z.number(),
     shop_id: z.number(),

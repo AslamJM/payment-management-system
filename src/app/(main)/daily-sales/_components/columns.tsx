@@ -1,12 +1,14 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Checkbox } from "~/components/ui/checkbox";
-import { daysSince } from "~/lib/utils";
+import { cn, daysSince } from "~/lib/utils";
 
 import { type WholePayment } from "~/schemas/payment";
 import ColumnMenu from "./ColumnMenu";
 import AmountCell from "~/app/(main)/reports/_components/table/AmountCell";
 import AmounFooter from "~/app/(main)/reports/_components/table/AmounFooter";
+import { Badge } from "~/components/ui/badge";
+import { type PaymentStatus } from "@prisma/client";
 
 export const paymentColumns: ColumnDef<WholePayment>[] = [
   {
@@ -116,6 +118,13 @@ export const paymentColumns: ColumnDef<WholePayment>[] = [
   {
     accessorKey: "payment_status",
     header: "Status",
+    cell: ({ getValue }) => (
+      <Badge
+        className={`${cn(getValue() === "PAID" ? "bg-green-500" : "bg-red-500")}`}
+      >
+        {getValue() as PaymentStatus}
+      </Badge>
+    ),
   },
   {
     accessorKey: "collector",

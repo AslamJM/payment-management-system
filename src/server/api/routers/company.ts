@@ -46,7 +46,9 @@ export const companyRouter = createTRPCRouter({
                 name: true,
                 payments: {
                     select: {
-                        total: true
+                        total: true,
+                        due: true,
+                        paid: true
                     },
                     where: {
                         payment_date: {
@@ -61,7 +63,9 @@ export const companyRouter = createTRPCRouter({
         return companies.filter(c => c.payments.length > 0).map(c => ({
             id: c.id,
             name: c.name,
-            total: c.payments.reduce((acc, p) => acc + p.total, 0)
+            total: c.payments.reduce((acc, p) => acc + p.total, 0),
+            due: c.payments.reduce((acc, p) => acc + p.due, 0),
+            paid: c.payments.reduce((acc, p) => acc + p.paid, 0),
         }))
     })
 })

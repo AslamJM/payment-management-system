@@ -6,6 +6,7 @@ import TooltipIconButton from "~/components/common/TooltipIconButton";
 import { TableCell, TableRow } from "~/components/ui/table";
 import { rupees } from "~/lib/utils";
 import HistoryEditForm from "./HistoryEditForm";
+import HistoryDeleteConfirmation from "./HistoryDeleteConfirmation";
 
 interface SingleHistoryProps {
   history: PaymentHistory & {
@@ -21,8 +22,22 @@ const SingleHistory: FC<SingleHistoryProps> = ({ history }) => {
     setEditMode(false);
   };
 
+  const cancelDelete = () => {
+    setDeleteMode(false);
+  };
+
   if (editMode) {
     return <HistoryEditForm history={history} cancel={cancelEdit} />;
+  }
+
+  if (deleteMode) {
+    return (
+      <HistoryDeleteConfirmation
+        id={history.id}
+        payment_id={history.payment_id}
+        cancel={cancelDelete}
+      />
+    );
   }
 
   return (
@@ -34,11 +49,20 @@ const SingleHistory: FC<SingleHistoryProps> = ({ history }) => {
         <div className="flex items-center justify-end gap-4">
           <TooltipIconButton
             content="Edit History"
-            onClick={() => setEditMode(true)}
+            onClick={() => {
+              setDeleteMode(false);
+              setEditMode(true);
+            }}
           >
             <Edit className="h-4 w-4 text-orange-500" />
           </TooltipIconButton>
-          <TooltipIconButton content="Delete History">
+          <TooltipIconButton
+            content="Delete History"
+            onClick={() => {
+              setEditMode(false);
+              setDeleteMode(true);
+            }}
+          >
             <Trash className="h-4 w-4 text-red-500" />
           </TooltipIconButton>
         </div>

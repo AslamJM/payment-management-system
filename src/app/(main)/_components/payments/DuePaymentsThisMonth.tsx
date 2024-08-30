@@ -10,7 +10,7 @@ const DuePaymentsThisMonth = async () => {
   return (
     <CardWrapper
       title="Due Payments"
-      description={format(new Date(), "MMMM,yyyy")}
+      description={format(new Date(), "MMMM, yyyy")}
     >
       {data.length > 0 && (
         <Table>

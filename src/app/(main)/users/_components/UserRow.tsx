@@ -1,14 +1,14 @@
 "use client";
 
 import { type User } from "@prisma/client";
-import { Edit, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { type FC } from "react";
-import TooltipIconButton from "~/components/common/TooltipIconButton";
+import DeleteUserDialog from "~/components/forms/DeleteUserDialog";
+import UpdateUserDialog from "~/components/forms/UpdateUserDialog";
 import { TableCell, TableRow } from "~/components/ui/table";
 
 interface UserRowProps {
-  user: User;
+  user: Pick<User, "id" | "name" | "username" | "role">;
 }
 
 const UserRow: FC<UserRowProps> = ({ user }) => {
@@ -23,12 +23,8 @@ const UserRow: FC<UserRowProps> = ({ user }) => {
       <TableCell>
         {session && session.user.id !== user.id && (
           <div className="flex items-center gap-4">
-            <TooltipIconButton content="Edit">
-              <Edit className="h-4 w-4 text-orange-500" />
-            </TooltipIconButton>
-            <TooltipIconButton content="Delete">
-              <Trash className="h-4 w-4 text-red-500" />
-            </TooltipIconButton>
+            <UpdateUserDialog user={user} />
+            <DeleteUserDialog id={user.id} />
           </div>
         )}
       </TableCell>

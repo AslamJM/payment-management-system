@@ -1,7 +1,6 @@
 import {
   BadgeDollarSign,
   Building2,
-  Package2,
   Store,
   User,
   Users,

@@ -1,11 +1,15 @@
 import {
+  FileArchive,
   Home,
+  IndianRupee,
   LineChart,
   Package,
   Package2,
   PanelLeft,
   Search,
   ShoppingCart,
+  StoreIcon,
+  Users,
   Users2,
 } from "lucide-react";
 
@@ -32,45 +36,56 @@ const Navbar = () => {
           <nav className="grid gap-6 text-lg font-medium">
             <Link
               href="#"
-              className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
+              className="group flex   shrink-0 items-center  gap-2 rounded-full  text-lg font-semibold text-primary-foreground md:text-base"
             >
-              <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-              <span className="sr-only">Acme Inc</span>
+              <img
+                src="/logo.jpg"
+                alt="icon"
+                className="h-[32px] object-contain "
+              />
             </Link>
+
             <Link
-              href="/products"
+              href="/payments"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
-              <Home className="h-5 w-5" />
-              Products
+              <IndianRupee className="h-5 w-5" />
+              Payments
             </Link>
             <Link
-              href="/sales"
-              className="flex items-center gap-4 px-2.5 text-foreground"
+              href="/daily-sales"
+              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
               <ShoppingCart className="h-5 w-5" />
-              Sales
+              Daily Sales
             </Link>
             <Link
-              href="/customers"
+              href="/reports"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
-              <Package className="h-5 w-5" />
-              Customers
+              <FileArchive className="h-5 w-5" />
+              Reports
             </Link>
             <Link
-              href="/stores"
+              href="/shops"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
-              <Users2 className="h-5 w-5" />
-              Stores
+              <StoreIcon className="h-5 w-5" />
+              Shops
             </Link>
             <Link
-              href="/users"
+              href="/companies"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
               <LineChart className="h-5 w-5" />
-              Users
+              Companies
+            </Link>
+            <Link
+              href="/collectors"
+              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+            >
+              <Users className="h-5 w-5" />
+              Collectors
             </Link>
           </nav>
         </SheetContent>

@@ -22,6 +22,7 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useQueryParams } from "~/hooks/useQueryParams";
 import { DataTablePagination } from "~/components/common/DataTablePagination";
+import { cn } from "~/lib/utils";
 
 type TableProps = {
   payments: WholePayment[];
@@ -112,7 +113,12 @@ export default function PaymentTable({ payments, loading }: TableProps) {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={cn(
+                        cell.column.id === "due" ? "bg-red-200" : "",
+                      )}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

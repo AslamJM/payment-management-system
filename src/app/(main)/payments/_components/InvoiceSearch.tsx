@@ -39,7 +39,7 @@ const InvoiceSearch = () => {
             Search
           </Button>
         </div>
-        {!isLoading && !data && (
+        {!isLoading && !data && enabled && (
           <p className="text-muted-foreground">No invoice found.</p>
         )}
         {data && (
